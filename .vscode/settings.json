@@ -1,5 +1,35 @@
 {
-    "files.associations": {
-        "string": "cpp"
-    }
+	"files.associations": {
+		"iomanip": "cpp",
+		"*.tcc": "cpp",
+		"array": "cpp",
+		"cctype": "cpp",
+		"clocale": "cpp",
+		"cstdint": "cpp",
+		"cstdio": "cpp",
+		"cstdlib": "cpp",
+		"ctime": "cpp",
+		"cwchar": "cpp",
+		"cwctype": "cpp",
+		"exception": "cpp",
+		"initializer_list": "cpp",
+		"iosfwd": "cpp",
+		"iostream": "cpp",
+		"istream": "cpp",
+		"limits": "cpp",
+		"ostream": "cpp",
+		"sstream": "cpp",
+		"stdexcept": "cpp",
+		"streambuf": "cpp",
+		"system_error": "cpp",
+		"tuple": "cpp",
+		"type_traits": "cpp",
+		"typeinfo": "cpp",
+		"utility": "cpp",
+		"cmath": "cpp",
+		"new": "cpp",
+		"string_view": "cpp",
+		"chrono": "cpp"
+	},
+	"C_Cpp.errorSquiggles": "Enabled"
 }
