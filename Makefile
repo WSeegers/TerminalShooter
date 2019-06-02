@@ -1,8 +1,9 @@
 NAME = a.out
 CC = clang++
-CFLAGS = -Werror -Wall -Wextra
+# CFLAGS = -Werror -Wall -Wextra
+CFLAGS = -g
 INC = -Iinclude
-# LIB = -L 
+LIB = -lncurses 
 
 OS := $(shell uname)
 
