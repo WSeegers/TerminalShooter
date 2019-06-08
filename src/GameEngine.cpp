@@ -1,7 +1,7 @@
 #include "GameEngine.hpp"
 
 bool GameEngine::_didInit = false;
-const timespec GameEngine::frameTime = {0, SEC(1) / FRAME_RATE};
+const timespec GameEngine::frameTime = {0, SEC(1) / GameEngine::FRAME_RATE};
 
 GameEngine::GameEngine() {}
 
@@ -57,11 +57,11 @@ void GameEngine::_mainLoop(void)
 	this->_em.update();
 
 	move(0, 0);
-
+	refresh();
 	clock_gettime(CLOCK_MONOTONIC, &this->loopEnd);
 	this->diff = diff_ts(loopEnd, loopStart);
 	this->sleep = diff_ts(diff, frameTime);
-	if (!sleep.tv_sec && sleep.tv_nsec < SEC(1) / FRAME_RATE)
+	if (!sleep.tv_sec && sleep.tv_nsec < SEC(1) / GameEngine::FRAME_RATE)
 		nanosleep(&sleep, NULL);
 	this->_frameCount++;
 }
@@ -77,17 +77,19 @@ timespec diff_ts(const timespec &t1, const timespec &t2)
 	int sec = std::abs(t1.tv_sec - t2.tv_sec);
 	int nano = std::abs(t1.tv_nsec - t2.tv_nsec);
 	timespec ret;
-	ret.tv_sec = sec + nano - nano % 1000000000;
+	ret.tv_sec = sec + nano - (nano % 1000000000);
 	ret.tv_nsec = nano % 1000000000;
 
 	return ret;
 }
 
+
+// Debug function to print out game frames
 void printFrameCount(GameEngine &engine)
 {
 	printw("           ");
-	move(0, 0);
+	move(0, 1);
 	printw("#%ld", engine.getFrameCount() / 60);
-	move(1, 0);
+	move(1, 1);
 	printw("#%ld", engine.getFrameCount());
 }
