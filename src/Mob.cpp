@@ -11,8 +11,8 @@ Mob &Mob::operator=(const Mob other)
 {
 	if (this != &other)
 	{
-		this->_position = _position;
-		this->_velocity = _velocity;
+		this->_position = other._position;
+		this->_velocity = other._velocity;
 	}
 	return *this;
 }
