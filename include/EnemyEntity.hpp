@@ -1,20 +1,17 @@
 #ifndef ENEMYENTITY_HPP
 #define ENEMYENTITY_HPP
 
-#include "Entity.hpp"
 #include "Body.hpp"
+#include "Mob.hpp"
 #include "IKillable.hpp"
 
-class EnemyEntity : public Entity, public Body, public IKillable
+class EnemyEntity : public Body, public IKillable, public Mob
 {
 public:
 	EnemyEntity(const Vec2 position, const Body &body);
 	EnemyEntity(const Body &body);
 
-	void moveUP();
-	void moveDOWN();
-	void moveLEFT();
-	void moveRIGHT();
+    void update();
 
 private:
 	EnemyEntity();

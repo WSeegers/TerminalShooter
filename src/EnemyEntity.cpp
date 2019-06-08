@@ -6,22 +6,7 @@ EnemyEntity::EnemyEntity(const Vec2 position, const Body &body)
 EnemyEntity::EnemyEntity(const Body &body)
 		: Entity(), Body(body) {}
 
-void EnemyEntity::moveUP()
+void EnemyEntity::update()
 {
-	this->_position.y--;
-}
-
-void EnemyEntity::moveDOWN()
-{
-	this->_position.y++;
-}
-
-void EnemyEntity::moveLEFT()
-{
-	this->_position.x--;
-}
-
-void EnemyEntity::moveRIGHT()
-{
-	this->_position.x++;
+    this->_position += _velocity;
 }
