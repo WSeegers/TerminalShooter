@@ -32,7 +32,7 @@ public:
 	int getWidth() const;
 	int getHeight() const;
 	const std::string &getBody() const;
-	void setBody(const std::string b, uint32_t w, uint32_t h);
+	void setBody(const std::string body, uint32_t width, uint32_t height);
 
 private:
 	Body();
