@@ -29,6 +29,8 @@ EntityManager::EntityManager() : _player(makeDefaultPlayer())
 			Body(std::string("O"), 1, 1));
 		this->_playerProjectilesPool[i]->kill();
 	}
+
+	bzero(this->_enemyPool, sizeof(this->_enemyPool));
 }
 
 EntityManager::~EntityManager()
@@ -207,19 +209,28 @@ void EntityManager::createEnemy(EnemyFactory::EnemyTypes type, const Vec2 positi
 {
 	for (int i = 0; i < EntityManager::ENEMY_POOL_MAX; i++)
 	{
-		if (_enemyPool[i])
+		if (!_enemyPool[i])
 		{
 			_enemyPool[i] = EnemyFactory::createEnemy(type, position);
+			return ;
 		}
 	}
 }
 
 void EntityManager::updateEnemies()
 {
-	for (int i = 0; i < ENEMY_POOL_MAX; i++)
+	EnemyEntity *enemy;
+	Vec2 position;
+
+	for (int i = 0; i < EntityManager::ENEMY_POOL_MAX; i++)
 	{
 		if (_enemyPool[i])
 		{
+			enemy = _enemyPool[i];
+			position = enemy->getPosition();
+			this->_removeBody(position.y,
+							position.x,
+							*enemy);
 			_enemyPool[i]->update();
 		}
 	}
@@ -230,7 +241,7 @@ void EntityManager::drawEnemies()
 	EnemyEntity *enemy;
 	Vec2 position;
 
-	for (int i = 0; i < ENEMY_POOL_MAX; i++)
+	for (int i = 0; i < EntityManager::ENEMY_POOL_MAX; i++)
 	{
 		if (_enemyPool[i])
 		{
