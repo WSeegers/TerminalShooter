@@ -36,6 +36,16 @@ void GameEngine::start(void)
 		this->_mainLoop();
 }
 
+void GameEngine::drawStaticBorder(){
+	int width = GameEngine::WIN_WIDTH;
+	int height = GameEngine::WIN_HEIGHT;
+	for (int y = 0; y <= height; y++){
+		for(int x = 0; x <= width; x++){
+			if (x == 0 || y == height || x == width || y == 0)
+				mvaddch(y, x , '#');
+		}
+	}
+}
 GameEngine::~GameEngine() {}
 
 long GameEngine::getFrameCount(void) const
@@ -57,6 +67,7 @@ bool GameEngine::_init()
 							<< GameEngine::MIN_HEIGHT << " heigh\n";
 		return false;
 	}
+	GameEngine::drawStaticBorder();
 	cbreak();
 	noecho();
 	timeout(0);
