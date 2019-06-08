@@ -141,6 +141,7 @@ void EntityManager::updatePlayer()
 		}
 		
 	}
+	this->_player.update();
 }
 
 void EntityManager::drawPlayer()
