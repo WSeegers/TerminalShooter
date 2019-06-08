@@ -5,12 +5,15 @@
 
 #include "Projectile.hpp"
 #include "PlayerEntity.hpp"
+#include "EnemyFactory.hpp"
 
 class EntityManager
 {
 public:
 	static const int PLAYER_PROJECTILE_MAX = 15;
 	static const int ENEMY_PROJECTILE_MAX = 15;
+
+	static const int ENEMY_POOL_MAX = 20;
 
 	EntityManager();
 	~EntityManager();
@@ -29,6 +32,9 @@ private:
 	Projectile *_playerProjectilesPool[EntityManager::PLAYER_PROJECTILE_MAX];
 	void updateProjectiles();
 	void drawProjectiles();
+
+	EnemyEntity *_enemyPool[EntityManager::ENEMY_POOL_MAX];
+	void createEnemy(EnemyFactory::EnemyTypes t, const Vec2 position);
 };
 
 #endif

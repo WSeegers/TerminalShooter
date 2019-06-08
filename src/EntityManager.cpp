@@ -189,3 +189,14 @@ void EntityManager::_removeBody(int y, int x, const Body &body)
 		}
 	}
 }
+
+void EntityManager::createEnemy(EnemyFactory::EnemyTypes type, const Vec2 position)
+{
+	for (int i = 0; i < EntityManager::ENEMY_POOL_MAX; i++)
+	{
+		if (_enemyPool[i])
+		{
+			_enemyPool[i] = EnemyFactory::createEnemy(type, position);
+		}
+	}
+}
