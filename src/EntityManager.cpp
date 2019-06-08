@@ -1,6 +1,6 @@
 #include "EntityManager.hpp"
 
-PlayerEntity makeDefaultPlayer()
+static PlayerEntity makeDefaultPlayer()
 {
 	std::string l0("#<x> ");
 	std::string l1(" =x=>");
@@ -8,7 +8,7 @@ PlayerEntity makeDefaultPlayer()
 
 	std::string rawBody = (l0 + l1 + l2);
 	Body playerBody(rawBody, 5, 3);
-	return PlayerEntity(Vec2(3, 10), playerBody);
+	return PlayerEntity(Vec2(0, 0), playerBody);
 };
 
 EntityManager::EntityManager() : _player(makeDefaultPlayer())
