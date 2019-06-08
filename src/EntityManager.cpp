@@ -42,7 +42,6 @@ void EntityManager::update()
 
 	this->drawProjectiles();
 	this->drawPlayer();
-	refresh();
 }
 
 void EntityManager::_createPlayerShot()
