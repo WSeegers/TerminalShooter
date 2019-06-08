@@ -1,6 +1,6 @@
 #include "EnemyFactory.hpp"
 
-Body basic("*", 1, 1);
+Body basic("  *   *** * * ** * *", 5, 4);
 
 EnemyEntity *EnemyFactory::createEnemy(EnemyFactory::EnemyTypes t, const Vec2 position)
 {
