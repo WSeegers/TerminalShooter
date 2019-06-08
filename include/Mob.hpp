@@ -3,7 +3,7 @@
 
 #include "Entity.hpp"
 
-class Mob : public Entity
+class Mob : virtual public Entity
 {
 public:
 	Mob();

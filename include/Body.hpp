@@ -3,6 +3,8 @@
 
 #include <string>
 
+#include "Entity.hpp"
+
 /*
 	Example body [ 
 	'	', '/', 'x', '>', ' ',
@@ -21,7 +23,7 @@
 
 */
 
-class Body
+class Body: virtual public Entity
 {
 public:
 	Body(const std::string body, int width, int height);
