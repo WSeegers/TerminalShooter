@@ -2,9 +2,9 @@
 
 static PlayerEntity makeDefaultPlayer()
 {
-	std::string l0("#<x> ");
-	std::string l1(" =x=>");
-	std::string l2("#<x> ");
+	std::string l0(" <x> ");
+	std::string l1("H=x=H");
+	std::string l2("# x #");
 
 	std::string rawBody = (l0 + l1 + l2);
 	Body playerBody(rawBody, 5, 3);
@@ -19,7 +19,7 @@ EntityManager::EntityManager() : _player(makeDefaultPlayer())
 	{
 		this->_playerProjectilesPool[i] = new Projectile(
 				Vec2(),
-				Vec2(0.7, 0),
+				Vec2(0, -0.7),
 				Body(std::string("O"), 1, 1));
 		this->_playerProjectilesPool[i]->kill();
 	}
@@ -56,7 +56,7 @@ void EntityManager::_createPlayerShot()
 		if (!projectile->isAlive())
 		{
 			projectile->revive();
-			projectile->setPosition(this->_player.getPosition() + Vec2(5, 1));
+			projectile->setPosition(this->_player.getPosition());
 			break;
 		}
 	}
