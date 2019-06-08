@@ -80,6 +80,8 @@ void EntityManager::updateProjectiles()
 												projectile->getPosition().x,
 												*projectile);
 			projectile->update();
+			if (projectile->getPosition().y <= 1)
+				projectile->kill();
 		}
 	}
 }
