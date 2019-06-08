@@ -8,15 +8,15 @@
 class EnemyFactory
 {
 public:
-    EnemyFactory();
-    ~EnemyFactory();
+	EnemyFactory();
+	~EnemyFactory();
 
-    enum EnemyTypes
-    {
-        BASIC
-    };
+	enum EnemyTypes
+	{
+		BASIC
+	};
 
-    static EnemyEntity *createEnemy(EnemyFactory::EnemyTypes type, const Vec2 position);
+	static EnemyEntity *createEnemy(EnemyFactory::EnemyTypes type, const Vec2 position);
 
 private:
 };

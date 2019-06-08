@@ -8,5 +8,5 @@ EnemyEntity::EnemyEntity(const Body &body)
 
 void EnemyEntity::update()
 {
-    this->_position += _velocity;
+	this->_position += _velocity;
 }
