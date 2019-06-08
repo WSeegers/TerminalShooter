@@ -26,13 +26,13 @@
 class Body: virtual public Entity
 {
 public:
-	Body(const std::string body, int width, int height);
+	Body(const std::string body, uint32_t width, uint32_t height);
 	Body(const Body &other);
 
 	int getWidth() const;
 	int getHeight() const;
 	const std::string &getBody() const;
-	void setBody(const std::string b, int w, int h);
+	void setBody(const std::string b, uint32_t w, uint32_t h);
 
 private:
 	Body();

@@ -1,6 +1,6 @@
 #include "Body.hpp"
 
-Body::Body(const std::string body, int width, int height)
+Body::Body(const std::string body, uint32_t width, uint32_t height)
 		: _body(body), _width(width), _height(height)
 {
 	if (body.length() != width * height)
@@ -25,13 +25,10 @@ const std::string &Body::getBody() const
 	return this->_body;
 }
 
-void Body::setBody(const std::string b, int w, int h){
-	if (b.length() != w * h)
+void Body::setBody(const std::string b, uint32_t w, uint32_t h){
+	if (b.length() != w * h && b.length > 0)
 		throw "Length of the body needs to be equal to WIDTH * HEIGHT";
-	if (b.length > 0)
 		this->_body = b;
-	if (w)
 		this->_width = w;
-	if (h)
 		this->_height = h;
 }
