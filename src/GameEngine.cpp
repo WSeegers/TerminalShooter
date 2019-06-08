@@ -1,25 +1,5 @@
 #include "GameEngine.hpp"
 
-// PlayerEntity makeDefaultPlayer()
-// {
-// 	std::string l0(" <x> ");
-// 	std::string l1("==x=>");
-// 	std::string l2(" <x> ");
-
-// 	std::string rawBody = (l0 + l1 + l2);
-// 	Body playerBody(rawBody, 5, 3);
-// 	return PlayerEntity(Vec2(10, 10), playerBody);
-// };
-
-// Projectile makeProjectile()
-// {
-// 	std::string l0(">");
-
-// 	std::string rawBody = (l0);
-// 	Body projBody(rawBody, 1, 1);
-// 	return Projectile(Vec2(10, 10), Vec2(0.3, 0), projBody);
-// }
-
 bool GameEngine::_didInit = false;
 const timespec GameEngine::frameTime = {0, SEC(1) / FRAME_RATE};
 
