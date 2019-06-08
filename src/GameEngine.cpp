@@ -17,8 +17,8 @@ void GameEngine::start(void)
 }
 
 void GameEngine::drawStaticBorder(){
-	int width = GameEngine::WIN_WIDTH;
-	int height = GameEngine::WIN_HEIGHT;
+	int width = GameEngine::FIELD_WIDTH;
+	int height = GameEngine::FIELD_HEIGHT;
 	for (int y = 0; y <= height; y++){
 		for(int x = 0; x <= width; x++){
 			if (x == 0 || y == height || x == width || y == 0)

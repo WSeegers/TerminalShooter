@@ -121,11 +121,11 @@ void EntityManager::updatePlayer()
 				this->_player.moveLEFT();
 			break;
 		case 's':
-			if (y + this->_player.getHeight() < GameEngine::WIN_HEIGHT)
+			if (y + this->_player.getHeight() < GameEngine::FIELD_HEIGHT)
 				this->_player.moveDOWN();
 			break;
 		case 'd':
-			if (x + this->_player.getWidth() < GameEngine::WIN_WIDTH)
+			if (x + this->_player.getWidth() < GameEngine::FIELD_WIDTH)
 				this->_player.moveRIGHT();
 			break;
 		case ' ':
