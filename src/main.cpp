@@ -70,6 +70,4 @@ int main()
 {
 	GameEngine engine;
 	engine.start();
-
-	terminal_exit();
 }

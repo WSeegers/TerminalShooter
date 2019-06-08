@@ -5,9 +5,10 @@
 #include <time.h>
 #include <ncurses.h>
 #include <string>
+#include <signal.h>
+#include <iostream>
 
-#include "PlayerEntity.hpp"
-#include "Body.hpp"
+#include "EntityManager.hpp"
 
 #define SEC(s) s * 1000000000
 #define MAX_ENTITES 32
@@ -19,6 +20,9 @@ typedef void (*UpdateFunc)(GameEngine &engine);
 class GameEngine
 {
 public:
+	static const int MIN_HEIGHT = 100;
+	static const int MIN_WIDTH = 100;
+
 	GameEngine(void);
 	const int FRAME_RATE = 60;
 	// GameEngine(const UpdateFunc updateFunc);
@@ -34,18 +38,17 @@ private:
 	long _frameCount = 0;
 	UpdateFunc _updateFunc;
 
-	PlayerEntity _player;
+	EntityManager _em;
 
 	timespec loopStart = {0, 0};
 	timespec loopEnd = {0, 0};
 	timespec sleep = {0, 0};
 	timespec diff = {0, 0};
 
-	void _init();
+	static bool _didInit;
+	static bool _init(void);
+	static void _shutdown(void);
 	void _mainLoop(void);
-
-	void _drawBody(int y, int x, const Body &body);
-	void _removeBody(int y, int x, const Body &body);
 };
 
 /* Util Functions */

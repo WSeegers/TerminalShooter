@@ -1,23 +1,35 @@
 #include "GameEngine.hpp"
 
-PlayerEntity makeDefaultPlayer()
-{
-	std::string l0(" <x> ");
-	std::string l1("==x=>");
-	std::string l2(" <x> ");
+// PlayerEntity makeDefaultPlayer()
+// {
+// 	std::string l0(" <x> ");
+// 	std::string l1("==x=>");
+// 	std::string l2(" <x> ");
 
-	std::string rawBody = (l0 + l1 + l2);
-	Body playerBody(rawBody, 5, 3);
-	return PlayerEntity(playerBody);
-};
+// 	std::string rawBody = (l0 + l1 + l2);
+// 	Body playerBody(rawBody, 5, 3);
+// 	return PlayerEntity(Vec2(10, 10), playerBody);
+// };
 
-GameEngine::GameEngine() : _player(makeDefaultPlayer()){};
+// Projectile makeProjectile()
+// {
+// 	std::string l0(">");
+
+// 	std::string rawBody = (l0);
+// 	Body projBody(rawBody, 1, 1);
+// 	return Projectile(Vec2(10, 10), Vec2(0.3, 0), projBody);
+// }
+
+bool GameEngine::_didInit = false;
+
+GameEngine::GameEngine() {}
 
 void GameEngine::start(void)
 {
 	if (this->_running == true)
 		return;
-	this->_init();
+	if (!this->_init())
+		return;
 	this->_running = true;
 	while (this->_running)
 		this->_mainLoop();
@@ -30,53 +42,40 @@ long GameEngine::getFrameCount(void) const
 	return this->_frameCount;
 }
 
-void GameEngine::_init()
+bool GameEngine::_init()
 {
+	if (GameEngine::_didInit)
+		endwin();
+
+	if (COLS < GameEngine::MIN_WIDTH || LINES < GameEngine::MIN_HEIGHT)
+	{
+		GameEngine::_shutdown();
+		std::cout << "Terminal min size is "
+							<< GameEngine::MIN_WIDTH << " wide & "
+							<< GameEngine::MIN_HEIGHT << " heigh\n";
+		return false;
+	}
 	initscr();
 	cbreak();
 	noecho();
-	keypad(stdscr, true);
 	timeout(0);
 	refresh();
+	return true;
+}
+
+void GameEngine::_shutdown()
+{
+	GameEngine::_didInit = false;
+	endwin();
 }
 
 void GameEngine::_mainLoop(void)
 {
 	clock_gettime(CLOCK_MONOTONIC, &this->loopStart);
 
-	// Temp Player movements
-	char c = getch();
-	switch (c)
-	{
-	case 'w':
-		this->_player.moveUP();
-		break;
-	case 'a':
-		this->_player.moveLEFT();
-		break;
-	case 's':
-		this->_player.moveDOWN();
-		break;
-	case 'd':
-		this->_player.moveRIGHT();
-		break;
-	}
-
-	if (c > -1)
-	{
-		mvprintw(0, 1, "X: %f", this->_player.getPosition().x);
-		mvprintw(1, 1, "Y: %f", this->_player.getPosition().y);
-	}
-
-	this->_drawBody(this->_player.getPosition().y,
-									this->_player.getPosition().x,
-									this->_player);
+	this->_em.update();
 
 	move(0, 0);
-	refresh();
-	this->_removeBody(this->_player.getPosition().y,
-										this->_player.getPosition().x,
-										this->_player);
 
 	clock_gettime(CLOCK_MONOTONIC, &this->loopEnd);
 	this->diff = diff_ts(loopEnd, loopStart);
@@ -89,50 +88,6 @@ void GameEngine::_mainLoop(void)
 void GameEngine::stop()
 {
 	this->_running = false;
-}
-
-void GameEngine::_drawBody(int y, int x, const Body &body)
-{
-	int _cy = -1;
-	int _cx;
-
-	int width = body.getWidth();
-	int height = body.getHeight();
-	const std::string &_body = body.getBody();
-
-	while (++_cy < height)
-	{
-		_cx = -1;
-		while (++_cx < width)
-		{
-			// Todo: add handle for "blank val"
-			mvaddch(
-					_cy + y,
-					_cx + x,
-					_body[_cx + _cy * width]);
-		}
-	}
-}
-
-void GameEngine::_removeBody(int y, int x, const Body &body)
-{
-	int _cy = -1;
-	int _cx;
-
-	int width = body.getWidth();
-	int height = body.getHeight();
-
-	while (++_cy < height)
-	{
-		_cx = -1;
-		while (++_cx < width)
-		{
-			mvaddch(
-					_cy + y,
-					_cx + x,
-					' ');
-		}
-	}
 }
 
 /* Util Functions */

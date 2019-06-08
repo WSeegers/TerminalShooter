@@ -3,8 +3,9 @@
 
 #include "Entity.hpp"
 #include "Body.hpp"
+#include "IKillable.hpp"
 
-class PlayerEntity : public Entity, public Body
+class PlayerEntity : public Entity, public Body, public IKillable
 {
 public:
 	PlayerEntity(const Vec2 position, const Body &body);
