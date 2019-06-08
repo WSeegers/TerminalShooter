@@ -32,6 +32,7 @@ public:
 	int getWidth() const;
 	int getHeight() const;
 	const std::string &getBody() const;
+	void setBody(const std::string b, int w, int h);
 
 private:
 	Body();

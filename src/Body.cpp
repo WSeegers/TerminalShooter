@@ -24,3 +24,12 @@ const std::string &Body::getBody() const
 {
 	return this->_body;
 }
+
+void Body::setBody(const std::string b, int w, int h){
+	if (b[0])
+		this->_body = b;
+	if (w)
+		this->_width = w;
+	if (h)
+		this->_height = h;
+}
