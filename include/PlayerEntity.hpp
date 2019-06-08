@@ -1,12 +1,16 @@
 #ifndef PLAYERENTITY_HPP
 #define PLAYERENTITY_HPP
 
+#include <math.h>
+
 #include "Body.hpp"
 #include "IKillable.hpp"
+#include "Mob.hpp"
 
-class PlayerEntity : public Body, public IKillable
+class PlayerEntity : public Body, public IKillable, public Mob
 {
 public:
+	static const float DECELERATION; 
 	PlayerEntity(const Vec2 position, const Body &body);
 	PlayerEntity(const Body &body);
 
@@ -17,6 +21,8 @@ public:
 
 	void setWeaponOffset(const Vec2 offset);
 	Vec2 getWeaponPosition();
+	void update();
+
 private:
 	Vec2 _weaponOffset;
 	PlayerEntity();
