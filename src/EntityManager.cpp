@@ -11,7 +11,10 @@ static PlayerEntity makeDefaultPlayer()
 
 	std::string rawBody = (l0 + l1 + l2);
 	Body playerBody(rawBody, 5, 3);
-	return PlayerEntity(Vec2(4, 25), playerBody);
+	PlayerEntity player(Vec2(4, 25), playerBody);
+	player.setWeaponOffset(Vec2((player.getWidth() / 2), (player.getHeight() / 2)));
+
+	return player;
 };
 
 EntityManager::EntityManager() : _player(makeDefaultPlayer())
@@ -58,7 +61,7 @@ void EntityManager::_createPlayerShot()
 		if (!projectile->isAlive())
 		{
 			projectile->revive();
-			projectile->setPosition(this->_player.getPosition());
+			projectile->setPosition(this->_player.getWeaponPosition());
 			break;
 		}
 	}

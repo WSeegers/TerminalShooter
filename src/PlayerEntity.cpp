@@ -25,3 +25,15 @@ void PlayerEntity::moveRIGHT()
 {
 	this->_position.x++;
 }
+
+void PlayerEntity::setWeaponOffset(const Vec2 offset) {
+	this->_weaponOffset = offset;
+}
+
+Vec2 PlayerEntity::getWeaponPosition()
+{
+	Vec2 weaponPosition = this->getPosition();
+	weaponPosition += this->_weaponOffset;
+
+	return weaponPosition;
+}
