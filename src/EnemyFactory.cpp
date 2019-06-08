@@ -1,6 +1,7 @@
 #include "EnemyFactory.hpp"
 
-Body basic("  *   *** * * ** * *", 5, 4);
+Body basic("*   * ***   *  ", 5, 3);
+Body trident("  *   *** * * ** * *", 5, 4);
 
 EnemyEntity *EnemyFactory::createEnemy(EnemyFactory::EnemyTypes t, const Vec2 position)
 {
@@ -8,5 +9,7 @@ EnemyEntity *EnemyFactory::createEnemy(EnemyFactory::EnemyTypes t, const Vec2 po
 	{
 		case BASIC:
 			return (new EnemyEntity(position, basic));
+		case TRIDENT:
+			return (new EnemyEntity(position, trident));
 	}
 }

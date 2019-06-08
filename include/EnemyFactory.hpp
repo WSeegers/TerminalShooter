@@ -13,7 +13,8 @@ public:
 
 	enum EnemyTypes
 	{
-		BASIC
+		BASIC,
+		TRIDENT
 	};
 
 	static EnemyEntity *createEnemy(EnemyFactory::EnemyTypes type, const Vec2 position);
