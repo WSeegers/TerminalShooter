@@ -15,7 +15,10 @@ public:
 	void moveLEFT();
 	void moveRIGHT();
 
+	void setWeaponOffset(const Vec2 offset);
+	Vec2 getWeaponPosition();
 private:
+	Vec2 _weaponOffset;
 	PlayerEntity();
 };
 
