@@ -47,11 +47,10 @@ void EntityManager::update()
 {
 	this->updateProjectiles();
 	this->updatePlayer();
+	this->updateEnemies();
 
 	this->drawProjectiles();
 	this->drawPlayer();
-
-	this->updateEnemies();
 	this->drawEnemies();
 }
 
