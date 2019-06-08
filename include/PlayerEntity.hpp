@@ -1,11 +1,10 @@
 #ifndef PLAYERENTITY_HPP
 #define PLAYERENTITY_HPP
 
-#include "Entity.hpp"
 #include "Body.hpp"
 #include "IKillable.hpp"
 
-class PlayerEntity : public Entity, public Body, public IKillable
+class PlayerEntity : public Body, public IKillable
 {
 public:
 	PlayerEntity(const Vec2 position, const Body &body);
