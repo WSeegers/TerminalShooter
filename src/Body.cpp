@@ -26,9 +26,9 @@ const std::string &Body::getBody() const
 }
 
 void Body::setBody(const std::string body, uint32_t width, uint32_t height){
-	if (b.length() != w * h && b.length > 0)
+	if (body.length() != width * height && body.length > 0)
 		throw "Length of the body needs to be equal to WIDTH * HEIGHT";
-		this->_body = b;
-		this->_width = w;
-		this->_height = h;
+		this->_body = body;
+		this->_width = width;
+		this->_height = height;
 }
