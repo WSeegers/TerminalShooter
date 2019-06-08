@@ -20,8 +20,8 @@ typedef void (*UpdateFunc)(GameEngine &engine);
 class GameEngine
 {
 public:
-	static const int MIN_HEIGHT = 25;
-	static const int MIN_WIDTH = 25;
+	static const int WIN_HEIGHT = 50;
+	static const int WIN_WIDTH = 100;
 	static const int FRAME_RATE = 100;
 	static const timespec frameTime; // = {0, SEC(1) / FRAME_RATE};
 
@@ -50,6 +50,7 @@ private:
 	static bool _init(void);
 	static void _shutdown(void);
 	void _mainLoop(void);
+	static void drawStaticBorder();
 };
 
 /* Util Functions */

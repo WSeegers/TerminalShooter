@@ -1,4 +1,7 @@
 #include "EntityManager.hpp"
+#include "GameEngine.hpp"
+#include "PlayerEntity.hpp"
+#include "Body.hpp"
 
 static PlayerEntity makeDefaultPlayer()
 {
@@ -8,7 +11,7 @@ static PlayerEntity makeDefaultPlayer()
 
 	std::string rawBody = (l0 + l1 + l2);
 	Body playerBody(rawBody, 5, 3);
-	return PlayerEntity(Vec2(0, 0), playerBody);
+	return PlayerEntity(Vec2(4, 25), playerBody);
 };
 
 EntityManager::EntityManager() : _player(makeDefaultPlayer())
@@ -76,6 +79,8 @@ void EntityManager::updateProjectiles()
 												projectile->getPosition().x,
 												*projectile);
 			projectile->update();
+			if (projectile->getPosition().y <= 1)
+				projectile->kill();
 		}
 	}
 }
@@ -103,24 +108,29 @@ void EntityManager::updatePlayer()
 	this->_removeBody(this->_player.getPosition().y,
 										this->_player.getPosition().x,
 										this->_player);
-
-	switch (getch())
-	{
-	case 'w':
-		this->_player.moveUP();
-		break;
-	case 'a':
-		this->_player.moveLEFT();
-		break;
-	case 's':
-		this->_player.moveDOWN();
-		break;
-	case 'd':
-		this->_player.moveRIGHT();
-		break;
-	case ' ':
-		this->_createPlayerShot();
-	}
+	int y = this->_player.getPosition().y ;
+	int x = this->_player.getPosition().x ;
+		switch (getch())
+		{
+		case 'w':
+			if (y > 1)
+				this->_player.moveUP();
+			break;
+		case 'a':
+			if (x > 1)
+				this->_player.moveLEFT();
+			break;
+		case 's':
+			if (y + this->_player.getHeight() < GameEngine::WIN_HEIGHT)
+				this->_player.moveDOWN();
+			break;
+		case 'd':
+			if (x + this->_player.getWidth() < GameEngine::WIN_WIDTH)
+				this->_player.moveRIGHT();
+			break;
+		case ' ':
+			this->_createPlayerShot();
+		}
 }
 
 void EntityManager::drawPlayer()
