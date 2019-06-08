@@ -35,6 +35,8 @@ private:
 
 	EnemyEntity *_enemyPool[EntityManager::ENEMY_POOL_MAX];
 	void createEnemy(EnemyFactory::EnemyTypes t, const Vec2 position);
+	void updateEnemies();
+	void drawEnemies();
 };
 
 #endif

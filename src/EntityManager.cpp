@@ -48,6 +48,9 @@ void EntityManager::update()
 
 	this->drawProjectiles();
 	this->drawPlayer();
+
+	this->updateEnemies();
+	this->drawEnemies();
 }
 
 void EntityManager::_createPlayerShot()
@@ -207,6 +210,35 @@ void EntityManager::createEnemy(EnemyFactory::EnemyTypes type, const Vec2 positi
 		if (_enemyPool[i])
 		{
 			_enemyPool[i] = EnemyFactory::createEnemy(type, position);
+		}
+	}
+}
+
+void EntityManager::updateEnemies()
+{
+	for (int i = 0; i < ENEMY_POOL_MAX; i++)
+	{
+		if (_enemyPool[i])
+		{
+			_enemyPool[i]->update();
+		}
+	}
+}
+
+void EntityManager::drawEnemies()
+{
+	EnemyEntity *enemy;
+	Vec2 position;
+
+	for (int i = 0; i < ENEMY_POOL_MAX; i++)
+	{
+		if (_enemyPool[i])
+		{
+			enemy = _enemyPool[i];
+			position = enemy->getPosition();
+			this->_drawBody(position.y,
+							position.x,
+							*enemy);
 		}
 	}
 }
