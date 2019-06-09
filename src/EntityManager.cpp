@@ -9,12 +9,12 @@ static PlayerEntity makeDefaultPlayer()
 	// std::string l1("H=x=H");
 	// std::string l2("# x #");
 
-	std::string l0("  .  ");  
-	std::string l1(" .'. ");  
-	std::string l2(" |o| ");  
-	std::string l3(".'o'.");  
-	std::string l4("|.-.|"); 
-	std::string l5("'   '"); 
+	std::string l0("  .  ");
+	std::string l1(" .'. ");
+	std::string l2(" |o| ");
+	std::string l3(".'o'.");
+	std::string l4("|.-.|");
+	std::string l5("'   '");
 
 	std::string rawBody = (l0 + l1 + l2 + l3 + l4 + l5);
 	Body playerBody(rawBody, 5, 6);
@@ -60,14 +60,19 @@ void EntityManager::update(int frameCount)
 
 	this->checkCollisions();
 
+	wattron(this->_gameField, COLOR_PAIR(1));
 	this->drawStars();
+	wattron(this->_gameField, COLOR_PAIR(5));
 	this->drawProjectiles();
+	wattron(this->_gameField, COLOR_PAIR(6));
 	this->drawPlayer();
+	wattron(this->_gameField, COLOR_PAIR(7));
 	this->drawEnemies();
-	
+	wattron(this->_gameField, COLOR_PAIR(1));
+
 	box(this->_gameField, 0, 0);
 	wrefresh(this->_gameField);
-	
+
 	// Testing enemy creation
 	if (!(frameCount % 100))
 		this->createEnemy(EnemyFactory::TRIDENT, Vec2(1, 10));
@@ -159,7 +164,7 @@ void EntityManager::updatePlayer()
 		if (coolShot < 1)
 		{
 			this->_createPlayerShot();
-			coolShot = 25;
+			coolShot = 16;
 		}
 	}
 	this->_player.update();
@@ -244,12 +249,14 @@ void EntityManager::createStars()
 	Vec2 velocity;
 	for (int i = 0; i < EntityManager::STAR_POOL_MAX; i++)
 	{
-		// position = Vec2(10, 6);
+		Body star(".", 1, 1);
 		position = Vec2(rand() % (getmaxx(this->_gameField) + 1) + 2, 0);
-		velocity = Vec2(0, ((rand() % 80 + 1) / 100.0f) + 0.2);
+		velocity = Vec2(0, ((rand() % 70 + 1) / 100.0f) + 0.2);
+		if (velocity.y > 0.5)
+			star.setBody("*", 1, 1);
 		if (!_starPool[i])
 		{
-			_starPool[i] = new StarEntity(position, velocity);
+			_starPool[i] = new StarEntity(star, position, velocity);
 			return;
 		}
 	}

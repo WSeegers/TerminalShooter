@@ -8,7 +8,7 @@ class StarEntity : public Body, public Mob
 {
 public:
 	StarEntity();
-	StarEntity(const Vec2 position, const Vec2 velocity);
+	StarEntity(const Body &body, const Vec2 position, const Vec2 velocity);
 
 private:
 };
