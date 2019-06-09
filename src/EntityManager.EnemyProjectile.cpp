@@ -1,5 +1,6 @@
-#include "GameEngine.hpp"
 #include "EntityManager.hpp"
+#include "GameEngine.hpp"
+#include "EnemyEntity.hpp"
 
 void EntityManager::initEnemyProjectilePool(void)
 {
@@ -7,7 +8,7 @@ void EntityManager::initEnemyProjectilePool(void)
     {
         this->_enemyProjectilesPool[i] = new Projectile(
             Vec2(),
-            Vec2(0, -0.7),
+            Vec2(0, 0.3),
             Body(std::string("V"), 1, 1));
         this->_enemyProjectilesPool[i]->kill();
     }
@@ -37,7 +38,7 @@ void EntityManager::updateEnemyProjectiles()
         {
             this->_removeBody(*enemyProjectile);
             enemyProjectile->update();
-            if (enemyProjectile->getPosition().y <= GameEngine::FIELD_HEIGHT)
+            if (enemyProjectile->getPosition().y >= GameEngine::FIELD_HEIGHT)
                 enemyProjectile->kill();
         }
     }
@@ -59,7 +60,7 @@ void EntityManager::createEnemyShot(EnemyEntity &enemy)
     }
 }
 
-void EntityManager::createEnemyShot(Vec2 &pos)
+void EntityManager::createEnemyShot(const Vec2 &pos)
 {
     Projectile *projectile;
 

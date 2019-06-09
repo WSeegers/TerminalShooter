@@ -1,14 +1,16 @@
 #ifndef ENEMYFACTORY_HPP
 #define ENEMYFACTORY_HPP
 
-#include "EnemyEntity.hpp"
 #include "Vec2.hpp"
 #include "Body.hpp"
+
+class EntityManager;
+class EnemyEntity;
 
 class EnemyFactory
 {
 public:
-	EnemyFactory();
+	EnemyFactory(EntityManager &em);
 	~EnemyFactory();
 
 	enum EnemyTypes
@@ -17,9 +19,10 @@ public:
 		TRIDENT
 	};
 
-	static EnemyEntity *createEnemy(EnemyFactory::EnemyTypes type, const Vec2 position);
+	EnemyEntity *createEnemy(EnemyFactory::EnemyTypes type, const Vec2 position);
 
 private:
+	EntityManager &_em;
 };
 
 #endif

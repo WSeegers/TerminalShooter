@@ -7,6 +7,9 @@
 #include "PlayerEntity.hpp"
 #include "EnemyFactory.hpp"
 
+class GameEngine;
+class EnemyEntity;
+
 class EntityManager
 {
 public:
@@ -19,10 +22,13 @@ public:
 	~EntityManager();
 
 	void update(int frameCount);
+	void createEnemyShot(EnemyEntity &enemy);
+	void createEnemyShot(const Vec2 &pos);
 
 private:
 	EntityManager();
-	
+	EnemyFactory _enemyFactory;
+
 	WINDOW *_gameField;
 	void _drawBody(const Body &body);
 	void _removeBody(const Body &body);
@@ -42,8 +48,6 @@ private:
 	void drawEnemies();
 
 	Projectile *_enemyProjectilesPool[EntityManager::ENEMY_PROJECTILE_MAX];
-	void createEnemyShot(EnemyEntity &enemy);
-	void createEnemyShot(Vec2 &pos);
 	void initEnemyProjectilePool(void);
 	void updateEnemyProjectiles();
 	void drawEnemyProjectiles();

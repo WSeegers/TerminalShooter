@@ -1,7 +1,6 @@
 #include "EntityManager.hpp"
 #include "GameEngine.hpp"
-#include "PlayerEntity.hpp"
-#include "Body.hpp"
+#include "EnemyEntity.hpp"
 
 static PlayerEntity makeDefaultPlayer()
 {
@@ -17,7 +16,9 @@ static PlayerEntity makeDefaultPlayer()
 	return player;
 };
 
-EntityManager::EntityManager(WINDOW *_gameField) : _gameField(_gameField), _player(makeDefaultPlayer())
+EntityManager::EntityManager(WINDOW *_gameField) : _enemyFactory(*this),
+												   _gameField(_gameField),
+												   _player(makeDefaultPlayer())
 {
 	for (int i = 0; i < EntityManager::PLAYER_PROJECTILE_MAX; i++)
 	{
@@ -44,18 +45,20 @@ EntityManager::~EntityManager()
 
 void EntityManager::update(int frameCount)
 {
+	this->updateEnemyProjectiles();
 	this->updateProjectiles();
 	this->updatePlayer();
 	this->updateEnemies();
 
 	this->checkCollisions();
 
+	this->drawEnemyProjectiles();
 	this->drawProjectiles();
 	this->drawPlayer();
 	this->drawEnemies();
 
 	wrefresh(this->_gameField);
-	
+
 	// Testing enemy creation
 	if (!(frameCount % 100))
 		this->createEnemy(EnemyFactory::TRIDENT, Vec2(1, 10));
@@ -131,10 +134,10 @@ void EntityManager::updatePlayer()
 			this->_player.moveLEFT();
 		break;
 	case 's':
-			this->_player.moveDOWN();
+		this->_player.moveDOWN();
 		break;
 	case 'd':
-			this->_player.moveRIGHT();
+		this->_player.moveRIGHT();
 		break;
 	case ' ':
 		if (coolShot < 1)
@@ -213,7 +216,7 @@ void EntityManager::createEnemy(EnemyFactory::EnemyTypes type, const Vec2 positi
 	{
 		if (!_enemyPool[i])
 		{
-			_enemyPool[i] = EnemyFactory::createEnemy(type, position);
+			_enemyPool[i] = this->_enemyFactory.createEnemy(type, position);
 			return;
 		}
 	}
