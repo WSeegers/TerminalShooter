@@ -8,6 +8,7 @@
 #include <iostream>
 
 #include "EntityManager.hpp"
+#include "Scoreboard.hpp"
 
 #define SEC(s) s * 1000000000
 
@@ -46,6 +47,8 @@ private:
 	void _shutdown(void);
 	void _mainLoop(void);
 	static void drawStaticBorder();
+
+	Scoreboard _scoreboard;
 };
 
 /* Util Functions */
