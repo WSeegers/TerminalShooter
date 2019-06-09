@@ -50,7 +50,6 @@
 		"cstddef": "cpp",
 		"cstring": "cpp",
 		"functional": "cpp",
-
 		"ios": "cpp",
 		"iterator": "cpp",
 		"locale": "cpp",
