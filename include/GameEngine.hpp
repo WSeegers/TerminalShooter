@@ -52,6 +52,7 @@ private:
 
 	pid_t _soundPid;
 	void _startMusic(void);
+	void _endMusic(void);
 
 	Scoreboard _scoreboard;
 };
