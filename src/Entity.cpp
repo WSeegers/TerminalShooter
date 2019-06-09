@@ -5,6 +5,8 @@ Entity::Entity(const Vec2 &position) : _position(position) {}
 Entity::Entity(double x, double y) : _position(Vec2(x, y)) {}
 Entity::Entity(const Entity &other) : _position(other._position) {}
 
+Entity::~Entity() {}
+
 Entity &Entity::operator=(const Entity other)
 {
 	if (this != &other)

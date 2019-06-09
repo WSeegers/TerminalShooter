@@ -1,7 +1,6 @@
 NAME = a.out
 CC = clang++
-# CFLAGS = -Werror -Wall -Wextra
-CFLAGS = -g -std=c++98
+CFLAGS = -Werror -Wall -Wextra -std=c++98
 INC = -Iinclude
 LIB = -lncurses
 
