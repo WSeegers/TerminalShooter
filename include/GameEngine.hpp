@@ -5,25 +5,21 @@
 #include <time.h>
 #include <ncurses.h>
 #include <string>
-#include <signal.h>
 #include <iostream>
 
 #include "EntityManager.hpp"
 
 #define SEC(s) s * 1000000000
-#define MAX_ENTITES 32
-
-class GameEngine;
-
-typedef void (*UpdateFunc)(GameEngine &engine);
 
 class GameEngine
 {
 public:
-	static const int MIN_HEIGHT = 50;
-	static const int MIN_WIDTH = 100;
 	static const int FIELD_HEIGHT = 50;
 	static const int FIELD_WIDTH = 100;
+	
+	static const int MIN_HEIGHT = GameEngine::FIELD_HEIGHT;
+	static const int MIN_WIDTH = GameEngine::FIELD_WIDTH;
+	
 	static const int FRAME_RATE = 100;
 	static const timespec frameTime; // = {0, SEC(1) / FRAME_RATE};
 
@@ -35,17 +31,17 @@ public:
 	void stop();
 
 private:
+	long _frameCount;
+	bool _running;
 	bool _didInit;
 	WINDOW *_gameField;
-	bool _running = false;
-	long _frameCount = 0;
 
 	EntityManager _em;
 
-	timespec loopStart = {0, 0};
-	timespec loopEnd = {0, 0};
-	timespec sleep = {0, 0};
-	timespec diff = {0, 0};
+	timespec _loopStart;
+	timespec _loopEnd;
+	timespec _sleep;
+	timespec _diff;
 
 	void _shutdown(void);
 	void _mainLoop(void);

@@ -38,6 +38,7 @@ public:
 	static bool test();
 private:
 	Body();
+	
 	std::string _body;
 	int _width;
 	int _height;
