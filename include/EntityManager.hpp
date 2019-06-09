@@ -20,6 +20,8 @@ public:
 	static const int ENEMY_POOL_MAX = 20;
 	static const int STAR_POOL_MAX = 100;
 
+	static const int BOSS_LIVES = 20;
+
 	EntityManager(WINDOW* _gameField);
 	~EntityManager();
 
@@ -27,10 +29,12 @@ public:
 	void createEnemyShot(EnemyEntity &enemy);
 	void createEnemyShot(const Vec2 &pos);
 	const Vec2 &getPlayerPosition() const;
+	void createEnemy(EnemyFactory::EnemyTypes t, const Vec2 position);
 
 private:
 	EntityManager();
 	EnemyFactory _enemyFactory;
+	EnemyEntity *_boss;
 
 	WINDOW *_gameField;
 	void _drawBody(const Body &body);
@@ -46,7 +50,6 @@ private:
 	void drawProjectiles();
 
 	EnemyEntity *_enemyPool[EntityManager::ENEMY_POOL_MAX];
-	void createEnemy(EnemyFactory::EnemyTypes t, const Vec2 position);
 	void updateEnemies();
 	void drawEnemies();
 

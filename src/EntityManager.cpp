@@ -2,6 +2,12 @@
 #include "GameEngine.hpp"
 #include "EnemyEntity.hpp"
 
+static Vec2 makeRandomSpawn()
+{
+	double x = rand() / (double)INT_MAX * (GameEngine::FIELD_WIDTH - 2) + 1;
+	return Vec2(x, -3);
+}
+
 static PlayerEntity makeDefaultPlayer()
 {
 	// std::string l0(" <x> ");
@@ -39,6 +45,7 @@ EntityManager::EntityManager(WINDOW *_gameField) : _enemyFactory(*this),
 	bzero(this->_enemyPool, sizeof(this->_enemyPool));
 	this->initEnemyProjectilePool();
 	bzero(this->_starPool, sizeof(this->_starPool));
+	this->_boss = this->_enemyFactory.createEnemy(EnemyFactory::BATTLESHIP, Vec2(-20, -300));
 }
 
 EntityManager::~EntityManager()
@@ -53,11 +60,13 @@ EntityManager::~EntityManager()
 
 void EntityManager::update(int frameCount)
 {
+	this->_removeBody(*this->_boss);
 	this->updateStars();
 	this->updateEnemyProjectiles();
 	this->updateProjectiles();
 	this->updatePlayer();
 	this->updateEnemies();
+	this->_boss->update();
 
 	this->checkCollisions();
 
@@ -65,14 +74,15 @@ void EntityManager::update(int frameCount)
 	this->drawEnemyProjectiles();
 	this->drawProjectiles();
 	this->drawPlayer();
+	this->_drawBody(*this->_boss);
 	this->drawEnemies();
 
 	box(this->_gameField, 0, 0);
 	wrefresh(this->_gameField);
 
 	// Testing enemy creation
-	if (!(frameCount % 300))
-		this->createEnemy(EnemyFactory::MINE, Vec2(10, 10));
+	if (!(frameCount % 120))
+		this->createEnemy(EnemyFactory::BASIC, makeRandomSpawn());
 
 	// Testing star creation
 	if (!(frameCount % 3))
@@ -158,7 +168,7 @@ void EntityManager::updatePlayer()
 		if (coolShot < 1)
 		{
 			this->createPlayerShot();
-			coolShot = 25;
+			coolShot = 16;
 		}
 	}
 	this->_player.update();
@@ -340,11 +350,25 @@ void EntityManager::drawStars()
 
 void EntityManager::checkCollisions()
 {
+	static int bossLives = EntityManager::BOSS_LIVES;
+	mvprintw(GameEngine::FIELD_HEIGHT + 1, 0 , "%.2d", bossLives);
+	
 	// Check player bullet collision with enemies
 	for (int i = 0; i < EntityManager::PLAYER_PROJECTILE_MAX; i++)
 	{
 		if (this->_playerProjectilesPool[i]->isAlive())
 		{
+			if (this->_boss->isColliding(*this->_playerProjectilesPool[i]))
+			{
+				bossLives--;
+				if (bossLives < 0)
+				{
+					endwin();
+					exit(0);
+				} // We need to win
+				this->_playerProjectilesPool[i]->kill();
+			}
+
 			for (int j = 0; j < EntityManager::ENEMY_POOL_MAX; j++)
 			{
 				if (this->_enemyPool[j])
@@ -353,6 +377,7 @@ void EntityManager::checkCollisions()
 					{
 						this->_enemyPool[j]->kill();
 						this->_playerProjectilesPool[i]->kill();
+						break;
 					}
 				}
 			}
@@ -367,12 +392,13 @@ void EntityManager::checkCollisions()
 			if (this->_player.isColliding(*(this->_enemyPool[i])))
 			{
 				// Game Over situation here
-				this->_player.setPosition(20, 20);
+				this->_player.setPosition(Vec2(GameEngine::FIELD_HEIGHT - 10, GameEngine::FIELD_WIDTH / 2));
 				this->_enemyPool[i]->kill();
 			}
 		}
 	}
 
+	// Check player collision with enemies projectiles
 	for (int i = 0; i < EntityManager::ENEMY_PROJECTILE_MAX; i++)
 	{
 		if (_enemyProjectilesPool[i]->isAlive())
@@ -380,11 +406,14 @@ void EntityManager::checkCollisions()
 			if (this->_player.isColliding(*this->_enemyProjectilesPool[i]))
 			{
 				// Game Over situation here
-				this->_player.setPosition(20, 20);
+				this->_player.setPosition(Vec2(GameEngine::FIELD_HEIGHT - 10, GameEngine::FIELD_WIDTH / 2));
 				this->_enemyProjectilesPool[i]->kill();
 			}
 		}
 	}
+
+	// Boos collisions
+	
 }
 
 const Vec2 &EntityManager::getPlayerPosition() const

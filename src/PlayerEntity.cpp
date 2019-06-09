@@ -1,7 +1,7 @@
 #include "PlayerEntity.hpp"
 #include "GameEngine.hpp"
 
-const float PlayerEntity::DECELERATION = 0.005;
+const double PlayerEntity::DECELERATION = 0.005;
 
 PlayerEntity::PlayerEntity(const Vec2 position, const Body &body)
 	: Entity(position), Body(body) {}
@@ -11,12 +11,12 @@ PlayerEntity::PlayerEntity(const Body &body)
 
 void PlayerEntity::moveUP()
 {
-	this->_velocity.y = -0.25;
+	this->_velocity.y = -0.2;
 }
 
 void PlayerEntity::moveDOWN()
 {
-	this->_velocity.y = 0.25;
+	this->_velocity.y = 0.2;
 }
 
 void PlayerEntity::moveLEFT()
@@ -45,8 +45,7 @@ Vec2 PlayerEntity::getWeaponPosition()
 void PlayerEntity::update()
 {
 
-	//Friction
-
+	//Drag
 	if (std::abs(this->_velocity.x) < 0.01)
 		this->_velocity.x = 0;
 	else if (this->_velocity.x > 0)

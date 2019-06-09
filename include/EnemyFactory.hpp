@@ -17,7 +17,8 @@ public:
 	{
 		BASIC,
 		TRIDENT,
-		MINE
+		MINE,
+		BATTLESHIP,
 	};
 
 	EnemyEntity *createEnemy(EnemyFactory::EnemyTypes type, const Vec2 position);

@@ -50,12 +50,12 @@
 		"cstddef": "cpp",
 		"cstring": "cpp",
 		"functional": "cpp",
-		"ios": "cpp",
 		"iterator": "cpp",
 		"locale": "cpp",
 		"memory": "cpp",
 		"mutex": "cpp",
-		"string": "cpp"
+		"string": "cpp",
+		"__functional_base_03": "cpp"
 	},
 	"C_Cpp.errorSquiggles": "Enabled"
 }
