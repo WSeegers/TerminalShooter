@@ -287,4 +287,18 @@ void EntityManager::checkCollisions()
 			}
 		}
 	}
+
+	// Check player collision with enemies
+	for (int i = 0; i < EntityManager::ENEMY_POOL_MAX; i++)
+	{
+		if (this->_enemyPool[i])
+		{
+			if (this->_player.isColliding(*(this->_enemyPool[i])))
+			{
+				// Game Over situation here
+				this->_player.setPosition(20, 20);
+				this->_enemyPool[i]->kill();
+			}
+		}
+	}
 }
