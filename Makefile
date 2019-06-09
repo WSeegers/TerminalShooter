@@ -4,6 +4,7 @@ CC = clang++
 CFLAGS = -g -std=c++98
 INC = -Iinclude
 LIB = -lncurses
+SND_PATH = $(realpath ./media/Background.mov)
 
 OS := $(shell uname)
 
@@ -20,7 +21,7 @@ $(NAME) : $(OBJ)
 	$(CC) $(CFLAGS) $(INC) -o $@ $^ $(LFLAGS) $(LIB)
 
 %.o : %.cpp
-	$(CC) $(CFLAGS) $(INC) -MMD -c $< -o $@
+	$(CC) -DSOUND='"$(SND_PATH)"' $(CFLAGS) $(INC) -MMD -c $< -o $@
 
 -include $(DEP)
 

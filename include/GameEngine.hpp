@@ -50,6 +50,9 @@ private:
 	void _mainLoop(void);
 	static void drawStaticBorder();
 
+	pid_t _soundPid;
+	void _startMusic(void);
+
 	Scoreboard _scoreboard;
 };
 
