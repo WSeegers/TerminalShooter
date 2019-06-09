@@ -9,6 +9,8 @@ PlayerEntity::PlayerEntity(const Vec2 position, const Body &body)
 PlayerEntity::PlayerEntity(const Body &body)
 	: Entity(), Body(body) {}
 
+PlayerEntity::~PlayerEntity() {}
+
 void PlayerEntity::moveUP()
 {
 	this->_velocity.y = -0.2;

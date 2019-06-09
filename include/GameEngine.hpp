@@ -28,6 +28,7 @@ public:
 
 	GameEngine(void);
 	~GameEngine(void);
+
 	void start(void);
 
 	long getFrameCount(void) const;
