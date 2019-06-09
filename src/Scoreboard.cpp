@@ -67,12 +67,12 @@ void Scoreboard::decScore(int i)
 
 void Scoreboard::incLives(int i)
 {
-	this->_score += i;
+	this->_lives += i;
 }
 
 void Scoreboard::decLives(int i)
 {
-	this->_score -= i;
+	this->_lives -= i;
 }
 
 int Scoreboard::_getTime()

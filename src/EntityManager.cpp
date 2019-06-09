@@ -23,9 +23,10 @@ static PlayerEntity makeDefaultPlayer()
 	return player;
 };
 
-EntityManager::EntityManager(WINDOW *_gameField) : _enemyFactory(*this),
+EntityManager::EntityManager(WINDOW *_gameField, Scoreboard &scoreboard) : _enemyFactory(*this),
 												   _gameField(_gameField),
-												   _player(makeDefaultPlayer())
+												   _player(makeDefaultPlayer()),
+												   _scoreboard(scoreboard)
 {
 	for (int i = 0; i < EntityManager::PLAYER_PROJECTILE_MAX; i++)
 	{
@@ -353,6 +354,7 @@ void EntityManager::checkCollisions()
 					{
 						this->_enemyPool[j]->kill();
 						this->_playerProjectilesPool[i]->kill();
+						this->_scoreboard.incScore(1);
 					}
 				}
 			}
@@ -369,6 +371,8 @@ void EntityManager::checkCollisions()
 				// Game Over situation here
 				this->_player.setPosition(20, 20);
 				this->_enemyPool[i]->kill();
+
+				this->_scoreboard.decLives(1);
 			}
 		}
 	}
@@ -382,6 +386,8 @@ void EntityManager::checkCollisions()
 				// Game Over situation here
 				this->_player.setPosition(20, 20);
 				this->_enemyProjectilesPool[i]->kill();
+
+				this->_scoreboard.decLives(1);
 			}
 		}
 	}

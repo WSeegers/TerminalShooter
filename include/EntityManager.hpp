@@ -7,6 +7,7 @@
 #include "PlayerEntity.hpp"
 #include "EnemyFactory.hpp"
 #include "StarEntity.hpp"
+#include "Scoreboard.hpp"
 
 class GameEngine;
 class EnemyEntity;
@@ -20,7 +21,7 @@ public:
 	static const int ENEMY_POOL_MAX = 20;
 	static const int STAR_POOL_MAX = 100;
 
-	EntityManager(WINDOW* _gameField);
+	EntityManager(WINDOW* _gameField, Scoreboard &scoreboard);
 	~EntityManager();
 
 	void update(int frameCount);
@@ -35,6 +36,8 @@ private:
 	WINDOW *_gameField;
 	void _drawBody(const Body &body);
 	void _removeBody(const Body &body);
+
+	Scoreboard &_scoreboard;
 
 	PlayerEntity _player;
 	void updatePlayer();
