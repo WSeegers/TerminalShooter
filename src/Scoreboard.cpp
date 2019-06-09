@@ -45,34 +45,51 @@ void Scoreboard::update(int frameCount)
 	wrefresh(this->_board);
 }
 
+int Scoreboard::getScore()
+{
+	return (this->_score);
+}
+
+uint32_t Scoreboard::getLives()
+{
+	return (this->_lives);
+}
+
 void Scoreboard::setScore(int i)
 {
 	this->_score = i;
 }
 
-void Scoreboard::setLives(int i)
+void Scoreboard::setLives(uint32_t i)
 {
 	this->_lives = i;
 }
 
-void Scoreboard::incScore(int i)
+void Scoreboard::incScore(uint32_t i)
 {
 	this->_score += i;
 }
 
-void Scoreboard::decScore(int i)
+void Scoreboard::decScore(uint32_t i)
 {
 	this->_score -= i;
 }
 
-void Scoreboard::incLives(int i)
+void Scoreboard::incLives(uint32_t i)
 {
 	this->_lives += i;
 }
 
-void Scoreboard::decLives(int i)
+void Scoreboard::decLives(uint32_t i)
 {
-	this->_lives -= i;
+	if (((int)this->_lives - (int)i) < 0)
+	{
+		this->_lives = 0;
+	}
+	else
+	{
+		this->_lives -= i;
+	}
 }
 
 int Scoreboard::_getTime()
