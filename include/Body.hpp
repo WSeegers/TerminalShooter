@@ -28,6 +28,9 @@ class Body: virtual public Entity
 public:
 	Body(const std::string body, uint32_t width, uint32_t height);
 	Body(const Body &other);
+	~Body();
+
+	Body &operator=(const Body other);
 
 	int getWidth() const;
 	int getHeight() const;

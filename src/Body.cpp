@@ -10,6 +10,19 @@ Body::Body(const std::string body, uint32_t width, uint32_t height)
 Body::Body(const Body &other)
 		: _body(other._body), _width(other._width), _height(other._height) {}
 
+Body::~Body() {};
+
+Body &Body::operator=(const Body other)
+{
+	if (&other != this)
+	{
+		this->_body = other._body;
+		this->_width = other._width;
+		this->_height = other._height;
+	}
+	return *this;
+}
+
 int Body::getWidth() const
 {
 	return this->_width;

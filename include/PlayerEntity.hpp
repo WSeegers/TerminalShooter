@@ -13,6 +13,8 @@ public:
 	static const double DECELERATION;
 	PlayerEntity(const Vec2 position, const Body &body);
 	PlayerEntity(const Body &body);
+	PlayerEntity(const PlayerEntity &other);
+	~PlayerEntity();
 
 	void moveUP();
 	void moveDOWN();
