@@ -1,6 +1,7 @@
 #include "EntityManager.hpp"
 #include "GameEngine.hpp"
 #include "EnemyEntity.hpp"
+#include <unistd.h>
 
 static PlayerEntity makeDefaultPlayer()
 {
@@ -131,6 +132,17 @@ void EntityManager::drawProjectiles()
 	}
 }
 
+void EntityManager::_playShotSound()
+{
+	this->_soundPid = fork();
+
+	if (!this->_soundPid)
+	{
+		execlp("afplay", "afplay", FSOUND, NULL);
+		exit(0);
+	}
+}
+
 void EntityManager::updatePlayer()
 {
 	this->_removeBody(this->_player);
@@ -159,6 +171,7 @@ void EntityManager::updatePlayer()
 		if (coolShot < 1)
 		{
 			this->createPlayerShot();
+			this->playShotSound();
 			coolShot = 25;
 		}
 	}

@@ -1,4 +1,5 @@
 #include "GameEngine.hpp"
+#include <unistd.h>
 
 const timespec GameEngine::frameTime = {0, SEC(1) / GameEngine::FRAME_RATE};
 
@@ -46,6 +47,7 @@ void GameEngine::start(void)
 	if (!this->_didInit)
 		return;
 	this->_running = true;
+	this->_startMusic();
 	while (this->_running)
 		this->_mainLoop();
 }
@@ -85,6 +87,17 @@ void GameEngine::_mainLoop(void)
 	if (!_sleep.tv_sec && _sleep.tv_nsec < SEC(1) / GameEngine::FRAME_RATE)
 		nanosleep(&_sleep, NULL);
 	this->_frameCount++;
+}
+
+void GameEngine::_startMusic(void)
+{
+	this->_soundPid = fork();
+
+	if (!this->_soundPid)
+	{
+		execlp("afplay", "afplay", BGSOUND, "-v", "0.4", NULL);
+		exit(0);
+	}
 }
 
 void GameEngine::stop()
