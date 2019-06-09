@@ -35,8 +35,7 @@ GameEngine::GameEngine() : _running(false),
 						   _frameCount(0),
 						   _didInit(_init()),
 						   _gameField(createGameField()),
-						   _em(this->_gameField),
-						   _soundPid(NULL)
+						   _em(this->_gameField)
 {
 	this->_scoreboard.setLives(GameEngine::PLAYER_START_LIVES);
 }
@@ -91,7 +90,7 @@ void GameEngine::_startMusic(void)
 
 	if (!this->_soundPid)
 	{
-		execlp("afplay", "afplay", SOUND, NULL);
+		execlp("afplay", "afplay", BGSOUND, "-v", "0.4", NULL);
 		exit(0);
 	}
 }
