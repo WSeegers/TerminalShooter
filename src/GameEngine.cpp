@@ -1,4 +1,6 @@
 #include "GameEngine.hpp"
+#include <unistd.h>
+#include <signal.h>
 
 const timespec GameEngine::frameTime = {0, SEC(1) / GameEngine::FRAME_RATE};
 
@@ -8,9 +10,9 @@ static bool _init()
 	// TODO need to be handled better
 	if (COLS < GameEngine::MIN_WIDTH || LINES < GameEngine::MIN_HEIGHT)
 	{
-		std::cout << "Terminal min size is "
-				  << GameEngine::MIN_WIDTH << " wide & "
-				  << GameEngine::MIN_HEIGHT << " heigh\n";
+		std::cout << "Terminal minimum size is "
+				  << GameEngine::MIN_WIDTH << " width & "
+				  << GameEngine::MIN_HEIGHT << " height\n";
 		return false;
 	}
 
@@ -41,36 +43,31 @@ static WINDOW *createGameField()
 	return subwindow;
 }
 
-GameEngine::GameEngine() : _didInit(_init()), _gameField(createGameField()), _em(this->_gameField)
+GameEngine::GameEngine() : _frameCount(0),
+						   _running(false),
+						   _didInit(_init()),
+						   _gameField(createGameField()),
+						   _em(this->_gameField, this->_scoreboard)
 {
+	this->_scoreboard.setLives(GameEngine::PLAYER_START_LIVES);
 }
 
 void GameEngine::start(void)
 {
 	if (this->_running == true)
 		return;
-	if (!this->_didInit)	
+	if (!this->_didInit)
 		return;
 	this->_running = true;
+	this->_startMusic();
 	while (this->_running)
 		this->_mainLoop();
 }
 
-void GameEngine::drawStaticBorder()
+GameEngine::~GameEngine()
 {
-	int width = GameEngine::FIELD_WIDTH;
-	int height = GameEngine::FIELD_HEIGHT;
-	for (int y = 0; y <= height; y++)
-	{
-		for (int x = 0; x <= width; x++)
-		{
-			if (x == 0 || y == height || x == width || y == 0)
-				mvaddch(y, x, '#');
-		}
-	}
+	this->_shutdown();
 }
-
-GameEngine::~GameEngine() {}
 
 long GameEngine::getFrameCount(void) const
 {
@@ -86,16 +83,42 @@ void GameEngine::_shutdown()
 
 void GameEngine::_mainLoop(void)
 {
-	clock_gettime(CLOCK_MONOTONIC, &this->loopStart);
+	clock_gettime(CLOCK_MONOTONIC, &this->_loopStart);
 
 	this->_em.update(this->_frameCount);
+	this->_scoreboard.update();
 
-	clock_gettime(CLOCK_MONOTONIC, &this->loopEnd);
-	this->diff = diff_ts(loopEnd, loopStart);
-	this->sleep = diff_ts(diff, frameTime);
-	if (!sleep.tv_sec && sleep.tv_nsec < SEC(1) / GameEngine::FRAME_RATE)
-		nanosleep(&sleep, NULL);
+	if (this->_scoreboard.getLives() == 0)
+	{
+		this->_endMusic();
+		this->_running = false;
+	}
+
+	clock_gettime(CLOCK_MONOTONIC, &this->_loopEnd);
+	this->_diff = diff_ts(_loopEnd, _loopStart);
+	this->_sleep = diff_ts(_diff, frameTime);
+	if (!_sleep.tv_sec && _sleep.tv_nsec < SEC(1) / GameEngine::FRAME_RATE)
+		nanosleep(&_sleep, NULL);
 	this->_frameCount++;
+}
+
+void GameEngine::_startMusic(void)
+{
+	this->_soundPid = fork();
+
+	if (!this->_soundPid)
+	{
+		execlp("afplay", "afplay", BGSOUND, "-v", "0.4", NULL);
+		exit(0);
+	}
+}
+
+void GameEngine::_endMusic(void)
+{
+	if (this->_soundPid)
+	{
+		kill(this->_soundPid, 9);
+	}
 }
 
 void GameEngine::stop()

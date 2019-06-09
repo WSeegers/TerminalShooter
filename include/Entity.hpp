@@ -10,6 +10,7 @@ public:
 	Entity(const Vec2 &position);
 	Entity(double x, double y);
 	Entity(const Entity &other);
+	virtual ~Entity();
 
 	Entity &operator=(const Entity other);
 

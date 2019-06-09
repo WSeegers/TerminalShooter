@@ -26,6 +26,7 @@ int main()
 
 	initscr();
 	curs_set(0);
+	noecho();
 	
 	WINDOW *menu = newwin(LINES / 2, COLS / 2, LINES / 4, COLS / 4);
 	box(menu, 0, 0);
