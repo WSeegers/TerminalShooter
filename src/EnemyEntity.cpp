@@ -10,6 +10,8 @@ EnemyEntity::EnemyEntity(EntityManager &em, const Vec2 position, const Body &bod
 EnemyEntity::EnemyEntity(EnemyEntity &other)
 	: Entity(other._position), Body(other.getBody), em(other.em), _update(other._update), _age(other._age) {}
 
+EnemyEntity::~EnemyEntity() {}
+
 void EnemyEntity::update()
 {
 	this->_age++;

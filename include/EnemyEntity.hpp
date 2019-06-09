@@ -15,6 +15,7 @@ public:
 	EnemyEntity(EntityManager &em, const Vec2 position, const Body &body);
 	EnemyEntity(EntityManager &em, const Vec2 position, const Body &body, void (*update)(EnemyEntity &));
 	EnemyEntity(EnemyEntity &other);
+	~EnemyEntity();
 
 	void update();
 
