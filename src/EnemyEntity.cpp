@@ -7,6 +7,9 @@ EnemyEntity::EnemyEntity(EntityManager &em, const Vec2 position, const Body &bod
 EnemyEntity::EnemyEntity(EntityManager &em, const Vec2 position, const Body &body, void (*update)(EnemyEntity &))
 	: Entity(position), Body(body), em(em), _update(update), _age(0) {}
 
+EnemyEntity::EnemyEntity(EnemyEntity &other)
+	: Entity(other._position), Body(other.getBody), em(other.em), _update(other._update), _age(other._age) {}
+
 void EnemyEntity::update()
 {
 	this->_age++;
@@ -25,4 +28,10 @@ uint32_t EnemyEntity::getAge()
 void EnemyEntity::setAge(uint32_t age)
 {
 	this->_age = age;
+}
+
+EnemyEntity EnemyEntity::operator=(EnemyEntity &rhs)
+{
+	this->_update = rhs._update;
+	this->_age = rhs._age;
 }
