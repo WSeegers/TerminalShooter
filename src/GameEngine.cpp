@@ -33,7 +33,11 @@ GameEngine::GameEngine() : _running(false),
 						   _frameCount(0),
 						   _didInit(_init()),
 						   _gameField(createGameField()),
-						   _em(this->_gameField) {}
+						   _em(this->_gameField)
+{
+	// This should be configured somewhere else
+	this->_scoreboard.setLives(5);
+}
 
 void GameEngine::start(void)
 {
