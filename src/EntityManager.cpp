@@ -131,7 +131,7 @@ void EntityManager::drawProjectiles()
 	}
 }
 
-void EntityManager::playShotSound()
+void EntityManager::_playShotSound()
 {
 	this->_soundPid = fork();
 

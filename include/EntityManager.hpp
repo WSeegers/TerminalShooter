@@ -44,7 +44,7 @@ private:
 	void createPlayerShot();
 	void updateProjectiles();
 	void drawProjectiles();
-	void playShotSound();
+	void _playShotSound();
 	pid_t _soundPid;
 
 	EnemyEntity *_enemyPool[EntityManager::ENEMY_POOL_MAX];
