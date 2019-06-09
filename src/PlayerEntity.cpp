@@ -62,7 +62,7 @@ void PlayerEntity::update()
 
 	this->_position += _velocity;
 
-	// Boarder
+	// Border
 	if (this->_position.x <= 1)
 	{
 		this->_position.x = 1;
