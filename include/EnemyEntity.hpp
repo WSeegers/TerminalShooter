@@ -14,6 +14,8 @@ class EnemyEntity : public Body, public IKillable, public Mob
 public:
 	EnemyEntity(EntityManager &em, const Vec2 position, const Body &body);
 	EnemyEntity(EntityManager &em, const Vec2 position, const Body &body, void (*update)(EnemyEntity &));
+	EnemyEntity(EnemyEntity &other);
+	~EnemyEntity();
 
 	void update();
 
@@ -21,6 +23,8 @@ public:
 
 	uint32_t getAge();
 	void setAge(uint32_t age);
+
+	EnemyEntity &operator=(EnemyEntity &rhs);
 
 private:
 	EnemyEntity();

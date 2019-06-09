@@ -11,6 +11,10 @@ public:
 	Projectile(const Vec2 &position,
 						 const Vec2 &velocity,
 						 const Body &body);
+	Projectile(Projectile &other);
+	~Projectile();
+
+	Projectile &operator=(Projectile &rhs);
 
 private:
 	Projectile();
