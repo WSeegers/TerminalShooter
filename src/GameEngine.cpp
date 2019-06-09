@@ -1,5 +1,6 @@
 #include "GameEngine.hpp"
 #include <unistd.h>
+#include <signal.h>
 
 const timespec GameEngine::frameTime = {0, SEC(1) / GameEngine::FRAME_RATE};
 
@@ -78,6 +79,10 @@ void GameEngine::_mainLoop(void)
 
 	if (this->_scoreboard.getLives() == 0)
 	{
+		if (this->_soundPid)
+		{
+			kill(this->_soundPid, 9);
+		}
 		this->_running = false;
 	}
 
