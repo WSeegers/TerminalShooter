@@ -10,7 +10,7 @@
 class PlayerEntity : public Body, public IKillable, public Mob
 {
 public:
-	static const float DECELERATION; 
+	static const double DECELERATION;
 	PlayerEntity(const Vec2 position, const Body &body);
 	PlayerEntity(const Body &body);
 

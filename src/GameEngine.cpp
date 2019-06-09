@@ -20,7 +20,7 @@ static bool _init()
 	curs_set(0);
 	timeout(0);
 	refresh();
-	srand (time(NULL));
+	srand(time(NULL));
 	return true;
 }
 
@@ -32,8 +32,8 @@ static WINDOW *createGameField()
 	return subwindow;
 }
 
-GameEngine::GameEngine() : _running(false),
-						   _frameCount(0),
+GameEngine::GameEngine() : _frameCount(0),
+						   _running(false),
 						   _didInit(_init()),
 						   _gameField(createGameField()),
 						   _em(this->_gameField, this->_scoreboard)
@@ -75,7 +75,7 @@ void GameEngine::_mainLoop(void)
 	clock_gettime(CLOCK_MONOTONIC, &this->_loopStart);
 
 	this->_em.update(this->_frameCount);
-	this->_scoreboard.update(this->_frameCount);
+	this->_scoreboard.update();
 
 	if (this->_scoreboard.getLives() == 0)
 	{

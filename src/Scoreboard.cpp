@@ -30,7 +30,7 @@ Scoreboard::~Scoreboard()
 	delwin(this->_board);
 }
 
-void Scoreboard::update(int frameCount)
+void Scoreboard::update()
 {
 	int startColumn = GameEngine::FIELD_WIDTH + 5;
 	int startRow = 5;

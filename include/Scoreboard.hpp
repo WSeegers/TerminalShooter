@@ -14,7 +14,7 @@ public:
 	Scoreboard(int lives);
 	~Scoreboard();
 
-	void update(int frameCount);
+	void update();
 
 	int getScore();
 	uint32_t getLives();
