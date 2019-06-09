@@ -7,6 +7,7 @@
 #include "PlayerEntity.hpp"
 #include "EnemyFactory.hpp"
 #include "StarEntity.hpp"
+#include "Scoreboard.hpp"
 
 class GameEngine;
 class EnemyEntity;
@@ -22,7 +23,7 @@ public:
 
 	static const int BOSS_LIVES = 20;
 
-	EntityManager(WINDOW* _gameField);
+	EntityManager(WINDOW* _gameField, Scoreboard &scoreboard);
 	~EntityManager();
 
 	void update(int frameCount);
@@ -40,6 +41,8 @@ private:
 	void _drawBody(const Body &body);
 	void _removeBody(const Body &body);
 
+	Scoreboard &_scoreboard;
+
 	PlayerEntity _player;
 	void updatePlayer();
 	void drawPlayer();
@@ -48,6 +51,8 @@ private:
 	void createPlayerShot();
 	void updateProjectiles();
 	void drawProjectiles();
+	void _playShotSound();
+	pid_t _soundPid;
 
 	EnemyEntity *_enemyPool[EntityManager::ENEMY_POOL_MAX];
 	void updateEnemies();

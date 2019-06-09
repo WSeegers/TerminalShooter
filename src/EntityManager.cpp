@@ -1,6 +1,7 @@
 #include "EntityManager.hpp"
 #include "GameEngine.hpp"
 #include "EnemyEntity.hpp"
+#include <unistd.h>
 
 static Vec2 makeRandomSpawn()
 {
@@ -29,9 +30,10 @@ static PlayerEntity makeDefaultPlayer()
 	return player;
 };
 
-EntityManager::EntityManager(WINDOW *_gameField) : _enemyFactory(*this),
-												   _gameField(_gameField),
-												   _player(makeDefaultPlayer())
+EntityManager::EntityManager(WINDOW *_gameField, Scoreboard &scoreboard) : _enemyFactory(*this),
+																		   _gameField(_gameField),
+																		   _scoreboard(scoreboard),
+																		   _player(makeDefaultPlayer())
 {
 	for (int i = 0; i < EntityManager::PLAYER_PROJECTILE_MAX; i++)
 	{
@@ -140,6 +142,17 @@ void EntityManager::drawProjectiles()
 	}
 }
 
+void EntityManager::_playShotSound()
+{
+	this->_soundPid = fork();
+
+	if (!this->_soundPid)
+	{
+		execlp("afplay", "afplay", FSOUND, NULL);
+		exit(0);
+	}
+}
+
 void EntityManager::updatePlayer()
 {
 	this->_removeBody(this->_player);
@@ -168,6 +181,7 @@ void EntityManager::updatePlayer()
 		if (coolShot < 1)
 		{
 			this->createPlayerShot();
+			this->_playShotSound();
 			coolShot = 16;
 		}
 	}
@@ -351,8 +365,8 @@ void EntityManager::drawStars()
 void EntityManager::checkCollisions()
 {
 	static int bossLives = EntityManager::BOSS_LIVES;
-	mvprintw(GameEngine::FIELD_HEIGHT + 1, 0 , "%.2d", bossLives);
-	
+	mvprintw(GameEngine::FIELD_HEIGHT + 1, 0, "%.2d", bossLives);
+
 	// Check player bullet collision with enemies
 	for (int i = 0; i < EntityManager::PLAYER_PROJECTILE_MAX; i++)
 	{
@@ -377,6 +391,7 @@ void EntityManager::checkCollisions()
 					{
 						this->_enemyPool[j]->kill();
 						this->_playerProjectilesPool[i]->kill();
+						this->_scoreboard.incScore(1);
 						break;
 					}
 				}
@@ -394,6 +409,8 @@ void EntityManager::checkCollisions()
 				// Game Over situation here
 				this->_player.setPosition(Vec2(GameEngine::FIELD_HEIGHT - 10, GameEngine::FIELD_WIDTH / 2));
 				this->_enemyPool[i]->kill();
+
+				this->_scoreboard.decLives(1);
 			}
 		}
 	}
@@ -408,12 +425,13 @@ void EntityManager::checkCollisions()
 				// Game Over situation here
 				this->_player.setPosition(Vec2(GameEngine::FIELD_HEIGHT - 10, GameEngine::FIELD_WIDTH / 2));
 				this->_enemyProjectilesPool[i]->kill();
+
+				this->_scoreboard.decLives(1);
 			}
 		}
 	}
 
 	// Boos collisions
-	
 }
 
 const Vec2 &EntityManager::getPlayerPosition() const

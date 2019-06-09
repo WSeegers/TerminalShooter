@@ -1,4 +1,6 @@
 #include "GameEngine.hpp"
+#include <unistd.h>
+#include <signal.h>
 
 const timespec GameEngine::frameTime = {0, SEC(1) / GameEngine::FRAME_RATE};
 
@@ -34,7 +36,7 @@ GameEngine::GameEngine() : _frameCount(0),
 						   _running(false),
 						   _didInit(_init()),
 						   _gameField(createGameField()),
-						   _em(this->_gameField)
+						   _em(this->_gameField, this->_scoreboard)
 {
 	this->_scoreboard.setLives(GameEngine::PLAYER_START_LIVES);
 }
@@ -46,6 +48,7 @@ void GameEngine::start(void)
 	if (!this->_didInit)
 		return;
 	this->_running = true;
+	this->_startMusic();
 	while (this->_running)
 		this->_mainLoop();
 }
@@ -74,12 +77,37 @@ void GameEngine::_mainLoop(void)
 	this->_em.update(this->_frameCount);
 	this->_scoreboard.update();
 
+	if (this->_scoreboard.getLives() == 0)
+	{
+		this->_endMusic();
+		this->_running = false;
+	}
+
 	clock_gettime(CLOCK_MONOTONIC, &this->_loopEnd);
 	this->_diff = diff_ts(_loopEnd, _loopStart);
 	this->_sleep = diff_ts(_diff, frameTime);
 	if (!_sleep.tv_sec && _sleep.tv_nsec < SEC(1) / GameEngine::FRAME_RATE)
 		nanosleep(&_sleep, NULL);
 	this->_frameCount++;
+}
+
+void GameEngine::_startMusic(void)
+{
+	this->_soundPid = fork();
+
+	if (!this->_soundPid)
+	{
+		execlp("afplay", "afplay", BGSOUND, "-v", "0.4", NULL);
+		exit(0);
+	}
+}
+
+void GameEngine::_endMusic(void)
+{
+	if (this->_soundPid)
+	{
+		kill(this->_soundPid, 9);
+	}
 }
 
 void GameEngine::stop()

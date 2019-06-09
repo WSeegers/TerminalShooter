@@ -16,18 +16,20 @@ public:
 
 	void update();
 
+	int getScore();
+	uint32_t getLives();
 	void setScore(int i);
-	void setLives(int i);
+	void setLives(uint32_t i);
 
-	void incScore(int i);
-	void decScore(int i);
-	void incLives(int i);
-	void decLives(int i);
+	void incScore(uint32_t i);
+	void decScore(uint32_t i);
+	void incLives(uint32_t i);
+	void decLives(uint32_t i);
 
 private:
 	WINDOW *_board;
 
-	uint32_t _score;
+	int _score;
 	uint32_t _lives;
 
 	std::time_t _startTime;
