@@ -6,6 +6,7 @@
 #include "Projectile.hpp"
 #include "PlayerEntity.hpp"
 #include "EnemyFactory.hpp"
+#include "StarEntity.hpp"
 
 class EntityManager
 {
@@ -14,6 +15,7 @@ public:
 	static const int ENEMY_PROJECTILE_MAX = 15;
 
 	static const int ENEMY_POOL_MAX = 20;
+	static const int STAR_POOL_MAX = 100;
 
 	EntityManager(WINDOW* _gameField);
 	~EntityManager();
@@ -40,6 +42,11 @@ private:
 	void createEnemy(EnemyFactory::EnemyTypes t, const Vec2 position);
 	void updateEnemies();
 	void drawEnemies();
+
+	StarEntity *_starPool[EntityManager::STAR_POOL_MAX];
+	void createStars();
+	void updateStars();
+	void drawStars();
 
 	void checkCollisions();
 };

@@ -18,6 +18,7 @@ static bool _init()
 	curs_set(0);
 	timeout(0);
 	refresh();
+	srand (time(NULL));
 	return true;
 }
 
