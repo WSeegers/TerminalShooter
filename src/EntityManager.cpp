@@ -171,7 +171,7 @@ void EntityManager::updatePlayer()
 		if (coolShot < 1)
 		{
 			this->createPlayerShot();
-			this->playShotSound();
+			this->_playShotSound();
 			coolShot = 25;
 		}
 	}
