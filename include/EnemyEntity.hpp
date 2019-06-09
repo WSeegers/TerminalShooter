@@ -24,7 +24,7 @@ public:
 	uint32_t getAge();
 	void setAge(uint32_t age);
 
-	EnemyEntity operator=(EnemyEntity &rhs);
+	EnemyEntity &operator=(EnemyEntity &rhs);
 
 private:
 	EnemyEntity();
