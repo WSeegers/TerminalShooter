@@ -15,14 +15,17 @@ public:
 
 	static const int ENEMY_POOL_MAX = 20;
 
-	EntityManager();
+	EntityManager(WINDOW* _gameField);
 	~EntityManager();
 
 	void update(int frameCount);
 
 private:
-	void _drawBody(int y, int x, const Body &body);
-	void _removeBody(int y, int x, const Body &body);
+	EntityManager();
+	
+	WINDOW *_gameField;
+	void _drawBody(const Body &body);
+	void _removeBody(const Body &body);
 
 	PlayerEntity _player;
 	void updatePlayer();

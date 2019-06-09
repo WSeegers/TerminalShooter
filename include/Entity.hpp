@@ -15,7 +15,7 @@ public:
 
 	void setPosition(const Vec2 &position);
 	void setPosition(double x, double y);
-	Vec2 &getPosition();
+	const Vec2 &getPosition(void) const;
 
 protected:
 	Vec2 _position;
