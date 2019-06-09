@@ -79,10 +79,7 @@ void GameEngine::_mainLoop(void)
 
 	if (this->_scoreboard.getLives() == 0)
 	{
-		if (this->_soundPid)
-		{
-			kill(this->_soundPid, 9);
-		}
+		this->_endMusic();
 		this->_running = false;
 	}
 
@@ -102,6 +99,14 @@ void GameEngine::_startMusic(void)
 	{
 		execlp("afplay", "afplay", BGSOUND, "-v", "0.4", NULL);
 		exit(0);
+	}
+}
+
+void GameEngine::_endMusic(void)
+{
+	if (this->_soundPid)
+	{
+		kill(this->_soundPid, 9);
 	}
 }
 
