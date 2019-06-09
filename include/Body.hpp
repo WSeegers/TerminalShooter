@@ -33,7 +33,9 @@ public:
 	int getHeight() const;
 	const std::string &getBody() const;
 	void setBody(const std::string body, uint32_t width, uint32_t height);
+	bool isColliding(Body &other);
 
+	static bool test();
 private:
 	Body();
 	std::string _body;

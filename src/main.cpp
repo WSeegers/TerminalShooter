@@ -1,5 +1,6 @@
 
 #include "GameEngine.hpp"
+#include "Body.hpp"
 
 void get_window_dimensions()
 {
@@ -11,8 +12,18 @@ void get_window_dimensions()
 	std::cout << termy << "/" << termx;
 }
 
+bool prelaunchTest()
+{
+	return Body::test();
+}
+
 int main()
 {
+	if (!prelaunchTest())
+	{
+		return 1;
+	}
+
 	GameEngine engine;
 	engine.start();
 }
