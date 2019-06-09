@@ -3,7 +3,7 @@ CC = clang++
 # CFLAGS = -Werror -Wall -Wextra
 CFLAGS = -g -std=c++98
 INC = -Iinclude
-LIB = -lncurses 
+LIB = -lncurses
 
 OS := $(shell uname)
 

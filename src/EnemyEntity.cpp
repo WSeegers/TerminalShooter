@@ -1,13 +1,13 @@
 #include "EnemyEntity.hpp"
 
 EnemyEntity::EnemyEntity(const Vec2 position, const Body &body)
-		: Entity(position), Body(body) {}
+		: Entity(position), Body(body), _age(0) {}
 
 EnemyEntity::EnemyEntity(const Body &body)
-		: Entity(), Body(body) {}
+		: Entity(), Body(body), _age(0) {}
 
 EnemyEntity::EnemyEntity(const Vec2 position, const Body &body, void (*update)(EnemyEntity &))
-		: Entity(position), Body(body), _update(update) {}
+		: Entity(position), Body(body), _update(update), _age(0) {}
 
 void EnemyEntity::update()
 {
