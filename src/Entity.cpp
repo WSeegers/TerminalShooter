@@ -25,7 +25,7 @@ void Entity::setPosition(double x, double y)
 	this->_position.y = y;
 }
 
-Vec2 &Entity::getPosition()
+const Vec2 &Entity::getPosition() const
 {
 	return this->_position;
 }

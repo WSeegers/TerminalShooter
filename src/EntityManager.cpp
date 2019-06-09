@@ -17,7 +17,7 @@ static PlayerEntity makeDefaultPlayer()
 	return player;
 };
 
-EntityManager::EntityManager() : _player(makeDefaultPlayer())
+EntityManager::EntityManager(WINDOW *_gameField) : _gameField(_gameField), _player(makeDefaultPlayer())
 {
 	int i;
 
@@ -52,6 +52,8 @@ void EntityManager::update()
 	this->drawProjectiles();
 	this->drawPlayer();
 	this->drawEnemies();
+
+	wrefresh(this->_gameField);
 }
 
 void EntityManager::_createPlayerShot()
@@ -82,9 +84,7 @@ void EntityManager::updateProjectiles()
 		if (projectile->isAlive())
 		{
 
-			this->_removeBody(projectile->getPosition().y,
-							  projectile->getPosition().x,
-							  *projectile);
+			this->_removeBody(*projectile);
 			projectile->update();
 			if (projectile->getPosition().y <= 1)
 				projectile->kill();
@@ -103,18 +103,14 @@ void EntityManager::drawProjectiles()
 		if (projectile->isAlive())
 		{
 
-			this->_drawBody(projectile->getPosition().y,
-							projectile->getPosition().x,
-							*projectile);
+			this->_drawBody(*projectile);
 		}
 	}
 }
 
 void EntityManager::updatePlayer()
 {
-	this->_removeBody(this->_player.getPosition().y,
-					  this->_player.getPosition().x,
-					  this->_player);
+	this->_removeBody(this->_player);
 	static int coolShot;
 	coolShot--;
 	int y = this->_player.getPosition().y;
@@ -150,17 +146,17 @@ void EntityManager::updatePlayer()
 
 void EntityManager::drawPlayer()
 {
-	this->_drawBody(this->_player.getPosition().y,
-					this->_player.getPosition().x,
-					this->_player);
+	this->_drawBody(this->_player);
 }
 
-void EntityManager::_drawBody(int y, int x, const Body &body)
+void EntityManager::_drawBody(const Body &body)
 {
 	int _cy = -1;
 	int _cx;
 	char bodyPart;
 
+	int x = body.getPosition().x;
+	int y = body.getPosition().y;
 	int width = body.getWidth();
 	int height = body.getHeight();
 	const std::string &_body = body.getBody();
@@ -172,7 +168,8 @@ void EntityManager::_drawBody(int y, int x, const Body &body)
 		{
 			bodyPart = _body[_cx + _cy * width];
 			if (bodyPart != ' ')
-				mvaddch(
+				mvwaddch(
+					this->_gameField,
 					_cy + y,
 					_cx + x,
 					bodyPart);
@@ -180,12 +177,14 @@ void EntityManager::_drawBody(int y, int x, const Body &body)
 	}
 }
 
-void EntityManager::_removeBody(int y, int x, const Body &body)
+void EntityManager::_removeBody(const Body &body)
 {
 	int _cy = -1;
 	int _cx;
 	char bodyPart;
 
+	int x = body.getPosition().x;
+	int y = body.getPosition().y;
 	int width = body.getWidth();
 	int height = body.getHeight();
 	const std::string &_body = body.getBody();
@@ -197,7 +196,8 @@ void EntityManager::_removeBody(int y, int x, const Body &body)
 		{
 			bodyPart = _body[_cx + _cy * width];
 			if (bodyPart != ' ')
-				mvaddch(
+				mvwaddch(
+					this->_gameField,
 					_cy + y,
 					_cx + x,
 					' ');
@@ -228,9 +228,7 @@ void EntityManager::updateEnemies()
 		{
 			enemy = _enemyPool[i];
 			position = enemy->getPosition();
-			this->_removeBody(position.y,
-							position.x,
-							*enemy);
+			this->_removeBody(*enemy);
 			_enemyPool[i]->update();
 		}
 	}
@@ -247,9 +245,7 @@ void EntityManager::drawEnemies()
 		{
 			enemy = _enemyPool[i];
 			position = enemy->getPosition();
-			this->_drawBody(position.y,
-							position.x,
-							*enemy);
+			this->_drawBody(*enemy);
 		}
 	}
 }
