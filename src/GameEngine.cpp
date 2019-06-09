@@ -76,7 +76,7 @@ void GameEngine::_mainLoop(void)
 {
 	clock_gettime(CLOCK_MONOTONIC, &this->loopStart);
 
-	this->_em.update();
+	this->_em.update(this->_frameCount);
 
 	clock_gettime(CLOCK_MONOTONIC, &this->loopEnd);
 	this->diff = diff_ts(loopEnd, loopStart);

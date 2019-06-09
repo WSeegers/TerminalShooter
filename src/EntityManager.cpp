@@ -43,7 +43,7 @@ EntityManager::~EntityManager()
 	}
 }
 
-void EntityManager::update()
+void EntityManager::update(int frameCount)
 {
 	this->updateProjectiles();
 	this->updatePlayer();
@@ -54,6 +54,10 @@ void EntityManager::update()
 	this->drawEnemies();
 
 	wrefresh(this->_gameField);
+	
+	// Testing enemy creation
+	if (!(frameCount % 100))
+		this->createEnemy(EnemyFactory::TRIDENT, Vec2(1, 10));
 }
 
 void EntityManager::_createPlayerShot()
@@ -115,7 +119,7 @@ void EntityManager::updatePlayer()
 	coolShot--;
 	int y = this->_player.getPosition().y;
 	int x = this->_player.getPosition().x;
-	
+
 	switch (getch())
 	{
 	case 'w':
@@ -135,11 +139,11 @@ void EntityManager::updatePlayer()
 			this->_player.moveRIGHT();
 		break;
 	case ' ':
-		if (coolShot < 1){
+		if (coolShot < 1)
+		{
 			this->_createPlayerShot();
 			coolShot = 25;
 		}
-		
 	}
 	this->_player.update();
 }
@@ -212,7 +216,7 @@ void EntityManager::createEnemy(EnemyFactory::EnemyTypes type, const Vec2 positi
 		if (!_enemyPool[i])
 		{
 			_enemyPool[i] = EnemyFactory::createEnemy(type, position);
-			return ;
+			return;
 		}
 	}
 }
@@ -224,12 +228,21 @@ void EntityManager::updateEnemies()
 
 	for (int i = 0; i < EntityManager::ENEMY_POOL_MAX; i++)
 	{
-		if (_enemyPool[i])
+		if (this->_enemyPool[i])
 		{
-			enemy = _enemyPool[i];
+			enemy = this->_enemyPool[i];
 			position = enemy->getPosition();
+
 			this->_removeBody(*enemy);
-			_enemyPool[i]->update();
+			if (!enemy->isAlive())
+			{
+				delete enemy;
+				this->_enemyPool[i] = nullptr;
+			}
+			else
+			{
+				this->_enemyPool[i]->update();
+			}
 		}
 	}
 }
@@ -241,9 +254,9 @@ void EntityManager::drawEnemies()
 
 	for (int i = 0; i < EntityManager::ENEMY_POOL_MAX; i++)
 	{
-		if (_enemyPool[i])
+		if (this->_enemyPool[i])
 		{
-			enemy = _enemyPool[i];
+			enemy = this->_enemyPool[i];
 			position = enemy->getPosition();
 			this->_drawBody(*enemy);
 		}

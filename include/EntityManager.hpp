@@ -1,7 +1,7 @@
 #ifndef ENTITYMANAGER_HPP
 #define ENTITYMANAGER_HPP
 
-#include "ncurses.h"
+#include <ncurses.h>
 
 #include "Projectile.hpp"
 #include "PlayerEntity.hpp"
@@ -18,7 +18,7 @@ public:
 	EntityManager(WINDOW* _gameField);
 	~EntityManager();
 
-	void update();
+	void update(int frameCount);
 
 private:
 	EntityManager();
