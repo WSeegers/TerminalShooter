@@ -35,8 +35,7 @@ GameEngine::GameEngine() : _running(false),
 						   _gameField(createGameField()),
 						   _em(this->_gameField)
 {
-	// This should be configured somewhere else
-	this->_scoreboard.setLives(5);
+	this->_scoreboard.setLives(GameEngine::PLAYER_START_LIVES);
 }
 
 void GameEngine::start(void)

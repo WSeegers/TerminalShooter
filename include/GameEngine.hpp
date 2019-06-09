@@ -24,6 +24,8 @@ public:
 	static const int FRAME_RATE = 100;
 	static const timespec frameTime; // = {0, SEC(1) / FRAME_RATE};
 
+	static const int PLAYER_START_LIVES = 5;
+
 	GameEngine(void);
 	~GameEngine(void);
 	void start(void);
