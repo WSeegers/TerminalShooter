@@ -19,9 +19,7 @@ static PlayerEntity makeDefaultPlayer()
 
 EntityManager::EntityManager(WINDOW *_gameField) : _gameField(_gameField), _player(makeDefaultPlayer())
 {
-	int i;
-
-	for (i = 0; i < EntityManager::PLAYER_PROJECTILE_MAX; i++)
+	for (int i = 0; i < EntityManager::PLAYER_PROJECTILE_MAX; i++)
 	{
 		this->_playerProjectilesPool[i] = new Projectile(
 			Vec2(),
@@ -31,6 +29,7 @@ EntityManager::EntityManager(WINDOW *_gameField) : _gameField(_gameField), _play
 	}
 
 	bzero(this->_enemyPool, sizeof(this->_enemyPool));
+	this->initEnemyProjectilePool();
 }
 
 EntityManager::~EntityManager()
@@ -62,12 +61,11 @@ void EntityManager::update(int frameCount)
 		this->createEnemy(EnemyFactory::TRIDENT, Vec2(1, 10));
 }
 
-void EntityManager::_createPlayerShot()
+void EntityManager::createPlayerShot()
 {
-	int i;
 	Projectile *projectile;
 
-	for (i = 0; i < EntityManager::PLAYER_PROJECTILE_MAX; i++)
+	for (int i = 0; i < EntityManager::PLAYER_PROJECTILE_MAX; i++)
 	{
 		projectile = _playerProjectilesPool[i];
 		if (!projectile->isAlive())
@@ -141,7 +139,7 @@ void EntityManager::updatePlayer()
 	case ' ':
 		if (coolShot < 1)
 		{
-			this->_createPlayerShot();
+			this->createPlayerShot();
 			coolShot = 25;
 		}
 	}

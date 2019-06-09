@@ -17,6 +17,7 @@ void tridentBehavior(EnemyEntity &self)
 	if (self.getAge() > 1500)
 		self.kill();
 }
+
 EnemyEntity *EnemyFactory::createEnemy(EnemyFactory::EnemyTypes t, const Vec2 position)
 {
 	switch (t)
