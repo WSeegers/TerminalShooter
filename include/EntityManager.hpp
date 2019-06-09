@@ -37,6 +37,8 @@ private:
 	void createEnemy(EnemyFactory::EnemyTypes t, const Vec2 position);
 	void updateEnemies();
 	void drawEnemies();
+
+	void checkCollisions();
 };
 
 #endif

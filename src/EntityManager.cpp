@@ -49,6 +49,8 @@ void EntityManager::update(int frameCount)
 	this->updatePlayer();
 	this->updateEnemies();
 
+	this->checkCollisions();
+
 	this->drawProjectiles();
 	this->drawPlayer();
 	this->drawEnemies();
@@ -261,6 +263,28 @@ void EntityManager::drawEnemies()
 			this->_drawBody(position.y,
 							position.x,
 							*enemy);
+		}
+	}
+}
+
+void EntityManager::checkCollisions()
+{
+	// Check player bullet collision with enemies
+	for (int i = 0; i < EntityManager::PLAYER_PROJECTILE_MAX; i++)
+	{
+		if (this->_playerProjectilesPool[i]->isAlive())
+		{
+			for (int j = 0; j < EntityManager::ENEMY_POOL_MAX; j++)
+			{
+				if (this->_enemyPool[j])
+				{
+					if (this->_playerProjectilesPool[i]->isColliding(*(this->_enemyPool[j])))
+					{
+						this->_enemyPool[j]->kill();
+						this->_playerProjectilesPool[i]->kill();
+					}
+				}
+			}
 		}
 	}
 }
