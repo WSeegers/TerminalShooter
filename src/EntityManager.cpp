@@ -4,14 +4,21 @@
 
 static PlayerEntity makeDefaultPlayer()
 {
-	std::string l0(" <x> ");
-	std::string l1("H=x=H");
-	std::string l2("# x #");
+	// std::string l0(" <x> ");
+	// std::string l1("H=x=H");
+	// std::string l2("# x #");
 
-	std::string rawBody = (l0 + l1 + l2);
-	Body playerBody(rawBody, 5, 3);
-	PlayerEntity player(Vec2(4, 25), playerBody);
-	player.setWeaponOffset(Vec2((player.getWidth() / 2), (player.getHeight() / 2)));
+	std::string l0("  .  ");
+	std::string l1(" .'. ");
+	std::string l2(" |o| ");
+	std::string l3(".'o'.");
+	std::string l4("|.-.|");
+	std::string l5("'   '");
+
+	std::string rawBody = (l0 + l1 + l2 + l3 + l4 + l5);
+	Body playerBody(rawBody, 5, 6);
+	PlayerEntity player(Vec2(GameEngine::FIELD_HEIGHT - 10, GameEngine::FIELD_WIDTH / 2), playerBody);
+	player.setWeaponOffset(Vec2((player.getWidth() / 2), 0));
 
 	return player;
 };
@@ -31,6 +38,7 @@ EntityManager::EntityManager(WINDOW *_gameField) : _enemyFactory(*this),
 
 	bzero(this->_enemyPool, sizeof(this->_enemyPool));
 	this->initEnemyProjectilePool();
+	bzero(this->_starPool, sizeof(this->_starPool));
 }
 
 EntityManager::~EntityManager()
@@ -45,6 +53,7 @@ EntityManager::~EntityManager()
 
 void EntityManager::update(int frameCount)
 {
+	this->updateStars();
 	this->updateEnemyProjectiles();
 	this->updateProjectiles();
 	this->updatePlayer();
@@ -52,16 +61,22 @@ void EntityManager::update(int frameCount)
 
 	this->checkCollisions();
 
+	this->drawStars();
 	this->drawEnemyProjectiles();
 	this->drawProjectiles();
 	this->drawPlayer();
 	this->drawEnemies();
 
+	box(this->_gameField, 0, 0);
 	wrefresh(this->_gameField);
 
 	// Testing enemy creation
-	if (!(frameCount % 100))
-		this->createEnemy(EnemyFactory::TRIDENT, Vec2(1, 10));
+	if (!(frameCount % 300))
+		this->createEnemy(EnemyFactory::MINE, Vec2(10, 10));
+
+	// Testing star creation
+	if (!(frameCount % 3))
+		this->createStars();
 }
 
 void EntityManager::createPlayerShot()
@@ -222,6 +237,23 @@ void EntityManager::createEnemy(EnemyFactory::EnemyTypes type, const Vec2 positi
 	}
 }
 
+void EntityManager::createStars()
+{
+	Vec2 position;
+	Vec2 velocity;
+	for (int i = 0; i < EntityManager::STAR_POOL_MAX; i++)
+	{
+		// position = Vec2(10, 6);
+		position = Vec2(rand() % (getmaxx(this->_gameField) + 1) + 2, 0);
+		velocity = Vec2(0, ((rand() % 80 + 1) / 100.0f) + 0.2);
+		if (!_starPool[i])
+		{
+			_starPool[i] = new StarEntity(position, velocity);
+			return;
+		}
+	}
+}
+
 void EntityManager::updateEnemies()
 {
 	EnemyEntity *enemy;
@@ -264,6 +296,48 @@ void EntityManager::drawEnemies()
 	}
 }
 
+void EntityManager::updateStars()
+{
+	StarEntity *star;
+	Vec2 position;
+
+	for (int i = 0; i < EntityManager::STAR_POOL_MAX; i++)
+	{
+		if (this->_starPool[i])
+		{
+			star = this->_starPool[i];
+			position = star->getPosition();
+
+			this->_removeBody(*star);
+			if (position.y >= getmaxy(this->_gameField))
+			{
+				delete star;
+				this->_starPool[i] = nullptr;
+			}
+			else
+			{
+				this->_starPool[i]->update();
+			}
+		}
+	}
+}
+
+void EntityManager::drawStars()
+{
+	StarEntity *star;
+	Vec2 position;
+
+	for (int i = 0; i < EntityManager::STAR_POOL_MAX; i++)
+	{
+		if (this->_starPool[i])
+		{
+			star = this->_starPool[i];
+			position = star->getPosition();
+			this->_drawBody(*star);
+		}
+	}
+}
+
 void EntityManager::checkCollisions()
 {
 	// Check player bullet collision with enemies
@@ -298,4 +372,22 @@ void EntityManager::checkCollisions()
 			}
 		}
 	}
+
+	for (int i = 0; i < EntityManager::ENEMY_PROJECTILE_MAX; i++)
+	{
+		if (_enemyProjectilesPool[i]->isAlive())
+		{
+			if (this->_player.isColliding(*this->_enemyProjectilesPool[i]))
+			{
+				// Game Over situation here
+				this->_player.setPosition(20, 20);
+				this->_enemyProjectilesPool[i]->kill();
+			}
+		}
+	}
 }
+
+const Vec2 &EntityManager::getPlayerPosition() const
+{
+	return this->_player.getPosition();
+};

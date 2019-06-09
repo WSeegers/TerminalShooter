@@ -14,8 +14,8 @@
 class GameEngine
 {
 public:
-	static const int FIELD_HEIGHT = 50;
-	static const int FIELD_WIDTH = 100;
+	static const int FIELD_HEIGHT = 80;
+	static const int FIELD_WIDTH = 130;
 	
 	static const int MIN_HEIGHT = GameEngine::FIELD_HEIGHT;
 	static const int MIN_WIDTH = GameEngine::FIELD_WIDTH;

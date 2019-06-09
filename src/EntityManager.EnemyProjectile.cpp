@@ -4,12 +4,12 @@
 
 void EntityManager::initEnemyProjectilePool(void)
 {
-    for (int i = 0; i < EntityManager::PLAYER_PROJECTILE_MAX; i++)
+    for (int i = 0; i < EntityManager::ENEMY_PROJECTILE_MAX; i++)
     {
         this->_enemyProjectilesPool[i] = new Projectile(
             Vec2(),
             Vec2(0, 0.3),
-            Body(std::string("V"), 1, 1));
+            Body(std::string("#HV"), 1, 3));
         this->_enemyProjectilesPool[i]->kill();
     }
 }

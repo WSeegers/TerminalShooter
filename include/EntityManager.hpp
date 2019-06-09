@@ -6,6 +6,7 @@
 #include "Projectile.hpp"
 #include "PlayerEntity.hpp"
 #include "EnemyFactory.hpp"
+#include "StarEntity.hpp"
 
 class GameEngine;
 class EnemyEntity;
@@ -17,6 +18,7 @@ public:
 	static const int ENEMY_PROJECTILE_MAX = 50;
 
 	static const int ENEMY_POOL_MAX = 20;
+	static const int STAR_POOL_MAX = 100;
 
 	EntityManager(WINDOW* _gameField);
 	~EntityManager();
@@ -24,6 +26,7 @@ public:
 	void update(int frameCount);
 	void createEnemyShot(EnemyEntity &enemy);
 	void createEnemyShot(const Vec2 &pos);
+	const Vec2 &getPlayerPosition() const;
 
 private:
 	EntityManager();
@@ -52,6 +55,10 @@ private:
 	void updateEnemyProjectiles();
 	void drawEnemyProjectiles();
 
+	StarEntity *_starPool[EntityManager::STAR_POOL_MAX];
+	void createStars();
+	void updateStars();
+	void drawStars();
 
 	void checkCollisions();
 };
