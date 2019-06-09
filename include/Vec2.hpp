@@ -14,6 +14,9 @@ public:
     Vec2 &operator+=(const Vec2 &);
     Vec2 &operator-=(const Vec2 &);
 
+    double getDist();
+    Vec2 getNormalized();
+
     double x;
     double y;
 };

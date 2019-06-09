@@ -1,7 +1,6 @@
 #include "EntityManager.hpp"
 #include "GameEngine.hpp"
-#include "PlayerEntity.hpp"
-#include "Body.hpp"
+#include "EnemyEntity.hpp"
 
 static PlayerEntity makeDefaultPlayer()
 {
@@ -9,26 +8,26 @@ static PlayerEntity makeDefaultPlayer()
 	// std::string l1("H=x=H");
 	// std::string l2("# x #");
 
-	std::string l0("  .  ");  
-	std::string l1(" .'. ");  
-	std::string l2(" |o| ");  
-	std::string l3(".'o'.");  
-	std::string l4("|.-.|"); 
-	std::string l5("'   '"); 
+	std::string l0("  .  ");
+	std::string l1(" .'. ");
+	std::string l2(" |o| ");
+	std::string l3(".'o'.");
+	std::string l4("|.-.|");
+	std::string l5("'   '");
 
 	std::string rawBody = (l0 + l1 + l2 + l3 + l4 + l5);
 	Body playerBody(rawBody, 5, 6);
-	PlayerEntity player(Vec2(4, 25), playerBody);
+	PlayerEntity player(Vec2(GameEngine::FIELD_HEIGHT - 10, GameEngine::FIELD_WIDTH / 2), playerBody);
 	player.setWeaponOffset(Vec2((player.getWidth() / 2), 0));
 
 	return player;
 };
 
-EntityManager::EntityManager(WINDOW *_gameField) : _gameField(_gameField), _player(makeDefaultPlayer())
+EntityManager::EntityManager(WINDOW *_gameField) : _enemyFactory(*this),
+												   _gameField(_gameField),
+												   _player(makeDefaultPlayer())
 {
-	int i;
-
-	for (i = 0; i < EntityManager::PLAYER_PROJECTILE_MAX; i++)
+	for (int i = 0; i < EntityManager::PLAYER_PROJECTILE_MAX; i++)
 	{
 		this->_playerProjectilesPool[i] = new Projectile(
 			Vec2(),
@@ -38,6 +37,7 @@ EntityManager::EntityManager(WINDOW *_gameField) : _gameField(_gameField), _play
 	}
 
 	bzero(this->_enemyPool, sizeof(this->_enemyPool));
+	this->initEnemyProjectilePool();
 	bzero(this->_starPool, sizeof(this->_starPool));
 }
 
@@ -54,6 +54,7 @@ EntityManager::~EntityManager()
 void EntityManager::update(int frameCount)
 {
 	this->updateStars();
+	this->updateEnemyProjectiles();
 	this->updateProjectiles();
 	this->updatePlayer();
 	this->updateEnemies();
@@ -61,28 +62,28 @@ void EntityManager::update(int frameCount)
 	this->checkCollisions();
 
 	this->drawStars();
+	this->drawEnemyProjectiles();
 	this->drawProjectiles();
 	this->drawPlayer();
 	this->drawEnemies();
-	
+
 	box(this->_gameField, 0, 0);
 	wrefresh(this->_gameField);
-	
+
 	// Testing enemy creation
-	if (!(frameCount % 100))
-		this->createEnemy(EnemyFactory::TRIDENT, Vec2(1, 10));
+	if (!(frameCount % 300))
+		this->createEnemy(EnemyFactory::MINE, Vec2(10, 10));
 
 	// Testing star creation
 	if (!(frameCount % 3))
 		this->createStars();
 }
 
-void EntityManager::_createPlayerShot()
+void EntityManager::createPlayerShot()
 {
-	int i;
 	Projectile *projectile;
 
-	for (i = 0; i < EntityManager::PLAYER_PROJECTILE_MAX; i++)
+	for (int i = 0; i < EntityManager::PLAYER_PROJECTILE_MAX; i++)
 	{
 		projectile = _playerProjectilesPool[i];
 		if (!projectile->isAlive())
@@ -148,15 +149,15 @@ void EntityManager::updatePlayer()
 			this->_player.moveLEFT();
 		break;
 	case 's':
-			this->_player.moveDOWN();
+		this->_player.moveDOWN();
 		break;
 	case 'd':
-			this->_player.moveRIGHT();
+		this->_player.moveRIGHT();
 		break;
 	case ' ':
 		if (coolShot < 1)
 		{
-			this->_createPlayerShot();
+			this->createPlayerShot();
 			coolShot = 25;
 		}
 	}
@@ -230,7 +231,7 @@ void EntityManager::createEnemy(EnemyFactory::EnemyTypes type, const Vec2 positi
 	{
 		if (!_enemyPool[i])
 		{
-			_enemyPool[i] = EnemyFactory::createEnemy(type, position);
+			_enemyPool[i] = this->_enemyFactory.createEnemy(type, position);
 			return;
 		}
 	}
@@ -371,4 +372,22 @@ void EntityManager::checkCollisions()
 			}
 		}
 	}
+
+	for (int i = 0; i < EntityManager::ENEMY_PROJECTILE_MAX; i++)
+	{
+		if (_enemyProjectilesPool[i]->isAlive())
+		{
+			if (this->_player.isColliding(*this->_enemyProjectilesPool[i]))
+			{
+				// Game Over situation here
+				this->_player.setPosition(20, 20);
+				this->_enemyProjectilesPool[i]->kill();
+			}
+		}
+	}
 }
+
+const Vec2 &EntityManager::getPlayerPosition() const
+{
+	return this->_player.getPosition();
+};

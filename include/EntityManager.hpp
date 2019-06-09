@@ -8,11 +8,14 @@
 #include "EnemyFactory.hpp"
 #include "StarEntity.hpp"
 
+class GameEngine;
+class EnemyEntity;
+
 class EntityManager
 {
 public:
 	static const int PLAYER_PROJECTILE_MAX = 15;
-	static const int ENEMY_PROJECTILE_MAX = 15;
+	static const int ENEMY_PROJECTILE_MAX = 50;
 
 	static const int ENEMY_POOL_MAX = 20;
 	static const int STAR_POOL_MAX = 100;
@@ -21,10 +24,14 @@ public:
 	~EntityManager();
 
 	void update(int frameCount);
+	void createEnemyShot(EnemyEntity &enemy);
+	void createEnemyShot(const Vec2 &pos);
+	const Vec2 &getPlayerPosition() const;
 
 private:
 	EntityManager();
-	
+	EnemyFactory _enemyFactory;
+
 	WINDOW *_gameField;
 	void _drawBody(const Body &body);
 	void _removeBody(const Body &body);
@@ -32,9 +39,9 @@ private:
 	PlayerEntity _player;
 	void updatePlayer();
 	void drawPlayer();
-	void _createPlayerShot();
 
 	Projectile *_playerProjectilesPool[EntityManager::PLAYER_PROJECTILE_MAX];
+	void createPlayerShot();
 	void updateProjectiles();
 	void drawProjectiles();
 
@@ -42,6 +49,11 @@ private:
 	void createEnemy(EnemyFactory::EnemyTypes t, const Vec2 position);
 	void updateEnemies();
 	void drawEnemies();
+
+	Projectile *_enemyProjectilesPool[EntityManager::ENEMY_PROJECTILE_MAX];
+	void initEnemyProjectilePool(void);
+	void updateEnemyProjectiles();
+	void drawEnemyProjectiles();
 
 	StarEntity *_starPool[EntityManager::STAR_POOL_MAX];
 	void createStars();
