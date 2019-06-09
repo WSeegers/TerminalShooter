@@ -8,6 +8,7 @@
 #include <iostream>
 
 #include "EntityManager.hpp"
+#include "Scoreboard.hpp"
 
 #define SEC(s) s * 1000000000
 
@@ -22,6 +23,8 @@ public:
 	
 	static const int FRAME_RATE = 100;
 	static const timespec frameTime; // = {0, SEC(1) / FRAME_RATE};
+
+	static const int PLAYER_START_LIVES = 5;
 
 	GameEngine(void);
 	~GameEngine(void);
@@ -46,6 +49,8 @@ private:
 	void _shutdown(void);
 	void _mainLoop(void);
 	static void drawStaticBorder();
+
+	Scoreboard _scoreboard;
 };
 
 /* Util Functions */
