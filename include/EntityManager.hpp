@@ -44,6 +44,8 @@ private:
 	void createPlayerShot();
 	void updateProjectiles();
 	void drawProjectiles();
+	void playShotSound();
+	pid_t _soundPid;
 
 	EnemyEntity *_enemyPool[EntityManager::ENEMY_POOL_MAX];
 	void createEnemy(EnemyFactory::EnemyTypes t, const Vec2 position);
