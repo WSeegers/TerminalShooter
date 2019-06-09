@@ -29,18 +29,15 @@ public:
 	static const timespec frameTime; // = {0, SEC(1) / FRAME_RATE};
 
 	GameEngine(void);
-	// GameEngine(const UpdateFunc updateFunc);
 	~GameEngine(void);
 	void start(void);
 
 	long getFrameCount(void) const;
-	// void setUpdateFunction(const UpdateFunc updateFunc);
 	void stop();
 
 private:
 	bool _running = false;
 	long _frameCount = 0;
-	UpdateFunc _updateFunc;
 
 	EntityManager _em;
 
