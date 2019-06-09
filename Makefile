@@ -4,7 +4,8 @@ CC = clang++
 CFLAGS = -g -std=c++98
 INC = -Iinclude
 LIB = -lncurses
-SND_PATH = $(realpath ./media/Background.mov)
+BG_SND_PATH = $(realpath ./media/background.mov)
+FIRE_SND_PATH = $(realpath ./media/shooty.mov)
 
 OS := $(shell uname)
 
@@ -21,7 +22,7 @@ $(NAME) : $(OBJ)
 	$(CC) $(CFLAGS) $(INC) -o $@ $^ $(LFLAGS) $(LIB)
 
 %.o : %.cpp
-	$(CC) -DSOUND='"$(SND_PATH)"' $(CFLAGS) $(INC) -MMD -c $< -o $@
+	$(CC) -DBGSOUND='"$(BG_SND_PATH)"' -DFSOUND='"$(FIRE_SND_PATH)"' $(CFLAGS) $(INC) -MMD -c $< -o $@
 
 -include $(DEP)
 
