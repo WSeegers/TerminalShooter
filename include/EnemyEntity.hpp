@@ -11,7 +11,7 @@ public:
 	EnemyEntity(const Vec2 position, const Body &body);
 	EnemyEntity(const Body &body);
 
-    void update();
+	void update();
 
 private:
 	EnemyEntity();
