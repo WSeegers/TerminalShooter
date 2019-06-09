@@ -3,7 +3,7 @@
 
 static WINDOW *createBoard()
 {
-	WINDOW *subwindow = newwin(Scoreboard::BOARD_WIDTH, Scoreboard::BOARD_HEIGHT, 0, GameEngine::FIELD_WIDTH);
+	WINDOW *subwindow = newwin(GameEngine::FIELD_HEIGHT, Scoreboard::BOARD_WIDTH, 0, GameEngine::FIELD_WIDTH);
 	box(subwindow, 0, 0);
 
 	return subwindow;

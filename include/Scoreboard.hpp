@@ -8,7 +8,6 @@
 class Scoreboard
 {
 public:
-	static const int BOARD_HEIGHT = 50;
 	static const int BOARD_WIDTH = 50;
 
 	Scoreboard();
